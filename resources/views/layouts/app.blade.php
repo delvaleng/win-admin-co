@@ -18,7 +18,7 @@
     <link href="{{  asset('css/style.css')}}" rel="stylesheet" type="text/css">
     @yield('css')
     <link rel="stylesheet" href="{{ asset('dist/css/AdminLTE.min.css') }}">
-    <title>@yield('title') | WIN</title>
+    <title>@yield('title') | WIN-ADMIN-COL</title>
   </head>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">

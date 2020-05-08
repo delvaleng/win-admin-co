@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Pais')
+@section('title', 'País')
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/DataTable/datatables.min.css') }}"/>
 <style>
@@ -18,7 +18,7 @@
 @endsection
 @section('content')
     <section class="content-header">
-        <h1 class="pull-left">Pais</h1>
+        <h1 class="pull-left">Pa&iacute;s</h1>
         <h1 class="pull-right">
            <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('pais.create') !!}">+</a>
         </h1>

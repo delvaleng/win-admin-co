@@ -18,9 +18,9 @@ class CreateVwMenuHojasView extends Migration
        SELECT m.id,
               m.section AS idseccion,
               m.path AS url,
-              winsystem.getramaid(m.id) AS ramaid,
-              winsystem.getramanombre(m.id) AS ramanombre
-         FROM winsystem.main m
+              winadmin.getramaid(m.id) AS ramaid,
+              winadmin.getramanombre(m.id) AS ramanombre
+         FROM winadmin.main m
         WHERE m.status_user = true AND m.status_system AND m.path IS NOT NULL;");
     }
 

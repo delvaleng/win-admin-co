@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Pais')
+@section('title', 'País')
 @section('content')
     <section class="content-header">
         <h1>
-          Pais
+          Pa&iacute;s
         </h1>
    </section>
    <div class="content">

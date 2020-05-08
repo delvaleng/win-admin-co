@@ -64,7 +64,7 @@ return [
             'password' => env('DB_PASSWORD', '123456.'),
             'charset'  => 'utf8',
             'prefix'   => '',
-            'schema'   => 'winsystem',
+            'schema'   => 'winadmin',
             'sslmode'  => 'prefer',
         ],
 

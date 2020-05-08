@@ -27,7 +27,7 @@ class CountryController extends AppBaseController
 
     $roles = Rol_User::where('id_user', auth()->user()->id)->get();
     foreach ($roles as $key) {
-      if($key->id_role == 2){
+      if($key->id_role == 1){
         return true;
       }
       else{
@@ -98,6 +98,7 @@ class CountryController extends AppBaseController
     public function store(CreateCountryRequest $request)
     {
         $input = $request->all();
+        $input{'country'} = mb_strtoupper($input{'country'});
 
         $country = $this->countryRepository->create($input);
 
@@ -179,8 +180,10 @@ class CountryController extends AppBaseController
 
             return redirect(route('pais.index'));
         }
+        $input = $request->all();
+        $input{'country'} = mb_strtoupper($input{'country'});
 
-        $country = $this->countryRepository->update($request->all(), $id);
+        $country = $this->countryRepository->update($input, $id);
 
         // Flash::success('Country updated successfully.');
 

@@ -6,13 +6,13 @@
 
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('country', 'Pais:') !!}
+    {!! Form::label('country', 'Pa&iacute;s:') !!}
     <p>{!! $country->country !!}</p>
 </div>
 
 
 <div class="form-group col-sm-6">
-    {!! Form::label('code', 'Codigo:') !!}
+    {!! Form::label('code', 'C&oacute;digo:') !!}
     <p>{!! $country->code !!}</p>
 </div>
 <div class="form-group col-sm-6">
@@ -24,15 +24,15 @@
     <p>{!! $country->moneda_admitida !!}</p>
 </div>
 <div class="form-group col-sm-6">
-    {!! Form::label('simbolo_local', 'Simbolo/Local:') !!}
+    {!! Form::label('simbolo_local', 'S&iacute;mbolo/Local:') !!}
     <p>{!! $country->simbolo_local !!}</p>
 </div>
 <div class="form-group col-sm-6">
-    {!! Form::label('simbolo_admitida', 'Simbolo/Admitida:') !!}
+    {!! Form::label('simbolo_admitida', 'S&iacute;mbolo/Admitida:') !!}
     <p>{!! $country->simbolo_admitida !!}</p>
 </div>
 <div class="form-group col-sm-6">
-    {!! Form::label('conversion_monto', 'Conversion/Monto:') !!}
+    {!! Form::label('conversion_monto', 'Conversi&oacute;n/Monto:') !!}
     <p>{!! $country->conversion_monto !!}</p>
 </div>
 

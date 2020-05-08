@@ -24,9 +24,9 @@ class CreateVwMenuRolesView extends Migration
             rm.id_role AS id_rol,
             r.description AS descripcion,
             rm.id AS id_rol_main
-          FROM winsystem.vw_menu_hojas mh
-          LEFT JOIN winsystem.rol_main rm ON mh.id = rm.id_main
-          LEFT JOIN winsystem.roles r ON r.id = rm.id_role;");
+          FROM winadmin.vw_menu_hojas mh
+          LEFT JOIN winadmin.rol_main rm ON mh.id = rm.id_main
+          LEFT JOIN winadmin.roles r ON r.id = rm.id_role;");
     }
 
     /**
