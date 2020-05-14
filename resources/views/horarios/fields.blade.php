@@ -1,6 +1,6 @@
 @if($horario != null)
 <!-- Id Field -->
-<div class="form-group col-sm-12" align="center">
+<div class="form-group col-sm-6">
     {!! Form::label('id', 'Empleado:') !!}
     <p>{!! $horario->horarioEmpleado[0]->nombre !!} {!! $horario->horarioEmpleado[0]->apellido  !!}</p>
 </div>
@@ -23,7 +23,7 @@
 </div>
 
 <!-- Submit Field -->
-<div class="form-group col-sm-12">
+<div class="form-group col-sm-6">
     {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
     @if($horario != null)
       <a href="{!! route('horarioUsers.show', [$horario->id_horario_user]) !!}" class="btn btn-default">Cancelar</a>

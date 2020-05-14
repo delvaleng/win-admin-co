@@ -1,7 +1,7 @@
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('country', 'Pa&iacute;s:') !!}
-    {!! Form::text('country', null, ['class' => 'form-control']) !!}
+  {!! Form::label('country', 'Pa&iacute;s:') !!}
+  {!! Form::text('country', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Country Field -->
@@ -40,10 +40,8 @@
   {!! Form::text('conversion_monto', null, ['class' => 'form-control']) !!}
 </div>
 
-
-
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
-    {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-    <a href="{!! route('pais.index') !!}" class="btn btn-default">Cancelar</a>
+  {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
+  <a href="{!! route('pais.index') !!}" class="btn btn-default">Cancelar</a>
 </div>

@@ -41,8 +41,8 @@ class PasswordoEmpleadoController extends AppBaseController
         $passwordoEmpleados = $this->passwordoEmpleadoRepository->all();
 
         return view('passwordo_empleados.index')
-            ->with('passwordoEmpleados', $passwordoEmpleados)
-            ->with('main', $main);
+        ->with('passwordoEmpleados', $passwordoEmpleados)
+        ->with('main',               $main);
     }
 
     /**
@@ -55,10 +55,10 @@ class PasswordoEmpleadoController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $empleado       =  Empleado::where('status', TRUE)
-        ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
-        ->orderBy('name',  'ASC')
-        ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
+      $empleado       =  Empleado::where('status', TRUE)
+      ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
+      ->orderBy('name',  'ASC')
+      ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
 
 
         return view('passwordo_empleados.create',compact('empleado'))
@@ -112,7 +112,7 @@ class PasswordoEmpleadoController extends AppBaseController
 
         return view('passwordo_empleados.show')
         ->with('passwordoEmpleado', $passwordoEmpleado)
-        ->with('main', $main);
+        ->with('main',              $main);
     }
 
     /**
@@ -127,11 +127,11 @@ class PasswordoEmpleadoController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $passwordoEmpleado = $this->passwordoEmpleadoRepository->find($id);
-        $empleado       =  Empleado::where('status', TRUE)
-        ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
-        ->orderBy('name',  'ASC')
-        ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
+      $passwordoEmpleado = $this->passwordoEmpleadoRepository->find($id);
+      $empleado       =  Empleado::where('status', TRUE)
+      ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
+      ->orderBy('name',  'ASC')
+      ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
 
 
 
@@ -142,9 +142,9 @@ class PasswordoEmpleadoController extends AppBaseController
         }
 
         return view('passwordo_empleados.edit')
-        ->with('empleado', $empleado)
+        ->with('empleado',          $empleado)
         ->with('passwordoEmpleado', $passwordoEmpleado)
-        ->with('main', $main);
+        ->with('main',              $main);
     }
 
     /**

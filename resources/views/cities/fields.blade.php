@@ -1,8 +1,8 @@
 <!-- City Field -->
 
 <div class="form-group col-sm-6">
-    {!! Form::label('city', 'Ciudad:') !!}
-    {!! Form::text('city', null, ['class' => 'form-control']) !!}
+  {!! Form::label('city', 'Ciudad:') !!}
+  {!! Form::text('city', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Id Departament Field -->
@@ -13,6 +13,6 @@
 
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
-    {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-    <a href="{!! route('ciudad.index') !!}" class="btn btn-default">Cancelar</a>
+  {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
+  <a href="{!! route('ciudad.index') !!}" class="btn btn-default">Cancelar</a>
 </div>

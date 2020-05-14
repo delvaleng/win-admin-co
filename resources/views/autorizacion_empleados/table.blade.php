@@ -26,7 +26,6 @@
         <td>{!! ($autorizacionEmpleado->id_marcacion)? $autorizacionEmpleado->marcacion->empleado->nombre.' '.$autorizacionEmpleado->marcacion->empleado->apellido   : '-' !!}</td>
         <td>{!! ($autorizacionEmpleado->id_marcacion)?  date('d-m-Y', strtotime($autorizacionEmpleado->marcacion->dia)): '-' !!}</td>
         <td>{!! ($autorizacionEmpleado->id_marcacion)? $autorizacionEmpleado->marcacion->tpMarcacion->descripcion  : '-' !!}</td>
-
         <td>{!! ($autorizacionEmpleado->creado_by)?  $autorizacionEmpleado->creadoBy->nombre.' '.$autorizacionEmpleado->creadoBy->apellido  : '-' !!}</td>
         <td>{!! ($autorizacionEmpleado->aprobado_by)?  $autorizacionEmpleado->aprobadoBy->nombre.' '.$autorizacionEmpleado->aprobadoBy->apellido  : '-' !!}</td>
         <td>{!! $autorizacionEmpleado->observacion !!}</td>
@@ -35,15 +34,15 @@
     </tbody>
 
     <tfoot>
-        <tr>
-          <th>Acci&oacute;n</th>
-          <th>Empleado</th>
-          <th>Dia</th>
-          <th>Tipo de Marcacion</th>
-          <th>Creado</th>
-          <th>Aprobado</th>
-          <th>Observacion</th>
-        </tr>
+      <tr>
+        <th>Acci&oacute;n</th>
+        <th>Empleado</th>
+        <th>Dia</th>
+        <th>Tipo de Marcacion</th>
+        <th>Creado</th>
+        <th>Aprobado</th>
+        <th>Observacion</th>
+      </tr>
     </tfoot>
   </table>
 </div>

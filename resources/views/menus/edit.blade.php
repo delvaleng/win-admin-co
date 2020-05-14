@@ -11,17 +11,18 @@
     Men&uacute;
   </h1>
 </section>
-  <div class="content">
-    <div class="box box-primary">
-      <div class="box-body">
-        <div class="row">
-          {!! Form::model($menu, ['route' => ['menus.update', $menu->id], 'method' => 'patch' , 'id'=>'formEditMenus']) !!}
-            @include('menus.fields')
-          {!! Form::close() !!}
-        </div>
+
+<div class="content">
+  <div class="box box-primary">
+    <div class="box-body">
+      <div class="row">
+        {!! Form::model($menu, ['route' => ['menus.update', $menu->id], 'method' => 'patch' , 'id'=>'formEditMenus']) !!}
+          @include('menus.fields')
+        {!! Form::close() !!}
       </div>
     </div>
   </div>
+</div>
 @endsection
 
 @section('scripts')

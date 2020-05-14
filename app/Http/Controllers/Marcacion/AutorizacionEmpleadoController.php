@@ -38,8 +38,8 @@ class AutorizacionEmpleadoController extends AppBaseController
         $autorizacionEmpleados = $this->autorizacionEmpleadoRepository->all();
 
         return view('autorizacion_empleados.index')
-            ->with('autorizacionEmpleados', $autorizacionEmpleados)
-            ->with('main', $main);
+        ->with('autorizacionEmpleados', $autorizacionEmpleados)
+        ->with('main', $main);
     }
 
     /**
@@ -130,7 +130,7 @@ class AutorizacionEmpleadoController extends AppBaseController
 
         return view('autorizacion_empleados.show')
         ->with('autorizacionEmpleado', $autorizacionEmpleado)
-        ->with('main', $main);
+        ->with('main',                 $main);
     }
 
     /**
@@ -155,7 +155,7 @@ class AutorizacionEmpleadoController extends AppBaseController
 
         return view('autorizacion_empleados.edit')
         ->with('autorizacionEmpleado', $autorizacionEmpleado)
-        ->with('main', $main);
+        ->with('main',                 $main);
     }
 
     /**

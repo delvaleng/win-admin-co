@@ -34,11 +34,11 @@ class TpDocumentoIdentidadController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $tpDocumentoIdentidads = $this->tpDocumentoIdentidadRepository->all();
+      $tpDocumentoIdentidads = $this->tpDocumentoIdentidadRepository->all();
 
-        return view('tp_documento_identidads.index')
-            ->with('tpDocumentoIdentidads', $tpDocumentoIdentidads)
-            ->with('main', $main);
+      return view('tp_documento_identidads.index')
+      ->with('tpDocumentoIdentidads', $tpDocumentoIdentidads)
+      ->with('main',                  $main);
     }
 
     /**
@@ -51,8 +51,8 @@ class TpDocumentoIdentidadController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        return view('tp_documento_identidads.create')
-        ->with('main', $main);
+      return view('tp_documento_identidads.create')
+      ->with('main', $main);
     }
 
     /**
@@ -95,7 +95,7 @@ class TpDocumentoIdentidadController extends AppBaseController
 
         return view('tp_documento_identidads.show')
         ->with('tpDocumentoIdentidad', $tpDocumentoIdentidad)
-        ->with('main', $main);
+        ->with('main',                 $main);
     }
 
     /**
@@ -120,7 +120,7 @@ class TpDocumentoIdentidadController extends AppBaseController
 
         return view('tp_documento_identidads.edit')
         ->with('tpDocumentoIdentidad', $tpDocumentoIdentidad)
-        ->with('main', $main);
+        ->with('main',                 $main);
     }
 
     /**

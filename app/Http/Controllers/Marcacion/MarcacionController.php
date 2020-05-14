@@ -55,9 +55,9 @@ class MarcacionController extends AppBaseController
         ->all();
 
         return view('marcacions.index')
-            ->with('marcacions', $marcacions)
-            ->with('tpempleado', $tpempleado)
-            ->with('main', $main);
+        ->with('marcacions', $marcacions)
+        ->with('tpempleado', $tpempleado)
+        ->with('main',       $main);
 
     }
     public function marcacionsMaps($long, $lat) {
@@ -80,14 +80,14 @@ class MarcacionController extends AppBaseController
 
     public function getMarcacions() {
       // code...
-      $formulario    = request()->formulario;
+      $formulario  = request()->formulario;
       $marcacions  = (new Marcacion)->with('empleado', 'tpMarcacion')->newQuery();
 
       $startDate  = ($formulario{'startDate'})?  $formulario{'startDate'} : null;   unset( $formulario{'startDate'});
       $endDate    = ($formulario{'endDate'}  )?  $formulario{'endDate'}   : null;   unset( $formulario{'endDate'});
 
       if($startDate != null && $endDate != null)       {
-        $marcacions = $marcacions->whereBetween('dia',  [date("Y-m-d", strtotime($startDate) ), date("Y-m-d", strtotime($endDate  ) ) ] ); }
+        $marcacions  = $marcacions->whereBetween('dia',  [date("Y-m-d", strtotime($startDate) ), date("Y-m-d", strtotime($endDate  ) ) ] ); }
 
       if ($formulario{'id_empleado'}) {
         $marcacions  = $marcacions->where('id_empleado', $formulario{'id_empleado'});
@@ -103,7 +103,7 @@ class MarcacionController extends AppBaseController
     public function reportSearch()
     {
       $datos =[];
-      $formulario    = request()->formulario;
+      $formulario  = request()->formulario;
 
       $marcacions  = (new Marcacion)->newQuery();
       $mes         = $formulario{'mes'};
@@ -166,25 +166,25 @@ class MarcacionController extends AppBaseController
 
 
         $dato = [
-          'id'               => $key->id,
-          'num'              => ++$i,
-          'nombre'           => ($key->id_empleado) ? $key->empleado->nombre   : '-',
-          'apellido'         => ($key->id_empleado) ? $key->empleado->apellido : '-',
-          'dia_letra'        => $dia_letra,
-          'fecha'            => date_format( $key->dia, 'd-m-Y'),
-          'entrada'          => date("g:i a",strtotime($entrada)),
-          'hora_inicio'      => date("g:i a",strtotime($hora_inicio)),
-          'resto_entrada'    => $resto_entrada{'minutos'},
-          'tp_resto_entrada' => $resto_entrada{'tp'},
-          'salida'           => date("g:i a",strtotime($salida)),
-          'hora_salida'      => ($hora_salida == null)? 'NO MARCO' : date("g:i a",strtotime($hora_salida)),
-          'resto_salida'     => $resto_salida{'minutos'},
-          'tp_resto_salida'  => $resto_salida{'tp'},
-          'total_positivo'   => $total_positivo,
-          'total_negativo'   => $total_negativo,
-          'autorizado_salida'   => $resto_salida{'autorizado'},
+          'id'                  => $key->id,
+          'num'                 => ++$i,
+          'nombre'              => ($key->id_empleado) ? $key->empleado->nombre   : '-',
+          'apellido'            => ($key->id_empleado) ? $key->empleado->apellido : '-',
+          'dia_letra'           => $dia_letra,
+          'fecha'               => date_format( $key->dia, 'd-m-Y'),
+          'entrada'             => date("g:i a",strtotime($entrada)),
+          'hora_inicio'         => date("g:i a",strtotime($hora_inicio)),
+          'resto_entrada'       => $resto_entrada{'minutos'},
+          'tp_resto_entrada'    => $resto_entrada{'tp'},
+          'salida'              => date("g:i a",strtotime($salida)),
+          'hora_salida'         => ($hora_salida == null)? 'NO MARCO' : date("g:i a",strtotime($hora_salida)),
+          'resto_salida'        => $resto_salida{'minutos'},
+          'tp_resto_salida'     => $resto_salida{'tp'},
+          'total_positivo'      => $total_positivo,
+          'total_negativo'      => $total_negativo,
+          'autorizado_salida'   => $resto_salida {'autorizado'},
           'autorizado_entrada'  => $resto_entrada{'autorizado'},
-          'observacion_salida'  => $resto_salida{'observacion'},
+          'observacion_salida'  => $resto_salida {'observacion'},
           'observacion_entrada' => $resto_entrada{'observacion'},
         ];
         array_push($datos, $dato);
@@ -334,9 +334,9 @@ class MarcacionController extends AppBaseController
     public function store()
     {
 
-        $input       = request()->all();
-        $password    = $input{'password'};
-        $id_empleado = $input{'id_empleado'};
+        $input           = request()->all();
+        $password        = $input{'password'};
+        $id_empleado     = $input{'id_empleado'};
         $id_tp_marcacion = $input{'id_tp_marcacion'};
         $validPass       = PasswordoEmpleado::where('password', $password)->where('id_empleado',$id_empleado)->where('status', TRUE)->first();
 
@@ -411,7 +411,7 @@ class MarcacionController extends AppBaseController
 
         return view('marcacions.show')
         ->with('marcacion', $marcacion)
-        ->with('main', $main);
+        ->with('main',      $main);
     }
 
     /**
@@ -436,7 +436,7 @@ class MarcacionController extends AppBaseController
 
         return view('marcacions.edit')
         ->with('marcacion', $marcacion)
-        ->with('main', $main);
+        ->with('main',      $main);
     }
 
     /**

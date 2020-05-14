@@ -37,8 +37,8 @@ class TpMarcacionController extends AppBaseController
         $tpMarcacions = $this->tpMarcacionRepository->all();
 
         return view('tp_marcacions.index')
-            ->with('tpMarcacions', $tpMarcacions)
-            ->with('main', $main);
+        ->with('tpMarcacions', $tpMarcacions)
+        ->with('main',         $main);
     }
 
     /**
@@ -51,8 +51,8 @@ class TpMarcacionController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        return view('tp_marcacions.create')
-        ->with('main', $main);
+      return view('tp_marcacions.create')
+      ->with('main', $main);
     }
 
     /**
@@ -96,7 +96,7 @@ class TpMarcacionController extends AppBaseController
 
         return view('tp_marcacions.show')
         ->with('tpMarcacion', $tpMarcacion)
-        ->with('main', $main);
+        ->with('main',        $main);
     }
 
     /**
@@ -121,7 +121,7 @@ class TpMarcacionController extends AppBaseController
 
         return view('tp_marcacions.edit')
         ->with('tpMarcacion', $tpMarcacion)
-        ->with('main', $main);
+        ->with('main',        $main);
     }
 
     /**

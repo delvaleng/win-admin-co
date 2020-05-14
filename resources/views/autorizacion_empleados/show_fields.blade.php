@@ -43,6 +43,6 @@
 
 <!-- Updated At Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('updated_at', 'Actualizado:') !!}
-    <p>{!! $autorizacionEmpleado->updated_at !!}</p>
+  {!! Form::label('updated_at', 'Actualizado:') !!}
+  <p>{!! $autorizacionEmpleado->updated_at !!}</p>
 </div>

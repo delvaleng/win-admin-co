@@ -43,7 +43,7 @@ class EmpleadoController extends AppBaseController
 
         return view('empleados.index')
             ->with('empleados', $empleados)
-            ->with('main', $main);
+            ->with('main',      $main);
     }
 
     /**
@@ -56,8 +56,8 @@ class EmpleadoController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-      $pais              = Pais::WHERE('status', '=', 'TRUE')->orderBy('country', 'ASC')->pluck('country', 'id');
-      $tpdocumentident   = TpDocumentoIdentidad::WHERE('status', '=', 'TRUE')->orderBy('descripcion', 'ASC')->pluck('descripcion', 'id');
+      $pais             = Pais::WHERE('status', '=', 'TRUE')->orderBy('country', 'ASC')->pluck('country', 'id');
+      $tpdocumentident  = TpDocumentoIdentidad::WHERE('status', '=', 'TRUE')->orderBy('descripcion', 'ASC')->pluck('descripcion', 'id');
 
         return view('empleados.create', compact('pais', 'tpdocumentident'))
         ->with('main', $main);
@@ -132,10 +132,10 @@ class EmpleadoController extends AppBaseController
         }
 
         return view('empleados.edit')
-        ->with('pais',     $pais)
+        ->with('pais',            $pais)
         ->with('tpdocumentident', $tpdocumentident)
-        ->with('empleado', $empleado)
-        ->with('main', $main);
+        ->with('empleado',        $empleado)
+        ->with('main',            $main);
     }
 
     /**
@@ -149,7 +149,7 @@ class EmpleadoController extends AppBaseController
     public function update($id, UpdateEmpleadoRequest $request)
     {
         $empleado          = $this->empleadoRepository->find($id);
-        $pais              = Pais::WHERE('status', '=', 'TRUE')->orderBy('country', 'ASC')->pluck('country', 'id');
+        $pais              = Pais                ::WHERE('status', '=', 'TRUE')->orderBy('country',     'ASC')->pluck('country',     'id');
         $tpdocumentident   = TpDocumentoIdentidad::WHERE('status', '=', 'TRUE')->orderBy('descripcion', 'ASC')->pluck('descripcion', 'id');
 
 

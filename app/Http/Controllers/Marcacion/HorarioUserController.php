@@ -42,8 +42,8 @@ class HorarioUserController extends AppBaseController
         $horarioUsers = $this->horarioUserRepository->all();
 
         return view('horario_users.index')
-            ->with('horarioUsers', $horarioUsers)
-            ->with('main', $main);
+        ->with('horarioUsers', $horarioUsers)
+        ->with('main',         $main);
     }
 
     /**
@@ -62,13 +62,13 @@ class HorarioUserController extends AppBaseController
       ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
 
       $dias= [
-        'Lunes' =>'Lunes',
-        'Martes' =>'Martes',
+        'Lunes'     =>'Lunes',
+        'Martes'    =>'Martes',
         'Miercoles' =>'Miercoles',
-        'Jueves' =>'Jueves',
-        'Viernes' =>'Viernes',
-        'Sabado' =>'Sabado',
-        'Domingo' =>'Domingo',
+        'Jueves'    =>'Jueves',
+        'Viernes'   =>'Viernes',
+        'Sabado'    =>'Sabado',
+        'Domingo'   =>'Domingo',
       ];
 
 
@@ -147,8 +147,8 @@ class HorarioUserController extends AppBaseController
         $horarios  = Horario::where('id_horario_user', $id)->get();
         return view('horario_users.show')
         ->with('horarioUser', $horarioUser)
-        ->with('horarios', $horarios)
-        ->with('main', $main);
+        ->with('horarios',    $horarios)
+        ->with('main',        $main);
     }
 
     /**
@@ -176,21 +176,21 @@ class HorarioUserController extends AppBaseController
         ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
 
         $dias= [
-          'Lunes' =>'Lunes',
-          'Martes' =>'Martes',
+          'Lunes'     =>'Lunes',
+          'Martes'    =>'Martes',
           'Miercoles' =>'Miercoles',
-          'Jueves' =>'Jueves',
-          'Viernes' =>'Viernes',
-          'Sabado' =>'Sabado',
-          'Domingo' =>'Domingo',
+          'Jueves'    =>'Jueves',
+          'Viernes'   =>'Viernes',
+          'Sabado'    =>'Sabado',
+          'Domingo'   =>'Domingo',
         ];
 
 
         return view('horario_users.edit')
         ->with('horarioUser', $horarioUser)
-        ->with('empleado', $empleado)
-        ->with('dias', $dias)
-        ->with('main', $main);
+        ->with('empleado',    $empleado)
+        ->with('dias',        $dias)
+        ->with('main',        $main);
     }
 
     /**

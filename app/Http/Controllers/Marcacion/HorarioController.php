@@ -37,8 +37,8 @@ class HorarioController extends AppBaseController
         $horarios = $this->horarioRepository->all();
 
         return view('horarios.index')
-            ->with('horarios', $horarios)
-            ->with('main', $main);
+        ->with('horarios', $horarios)
+        ->with('main',     $main);
     }
 
     /**
@@ -55,7 +55,7 @@ class HorarioController extends AppBaseController
 
         return view('horarios.create')
         ->with('horario', $horario)
-        ->with('main', $main);
+        ->with('main',    $main);
     }
 
     /**
@@ -72,7 +72,7 @@ class HorarioController extends AppBaseController
         $horario = $this->horarioRepository->create($input);
 
         Flash::success('Horario guardado exitosamente.');
-        
+
         return redirect(route('horarioUsers.show', [$horario->id_horario_user]));
 
         // return redirect(route('horarios.index'));
@@ -100,7 +100,7 @@ class HorarioController extends AppBaseController
 
         return view('horarios.show')
         ->with('horario', $horario)
-        ->with('main', $main);
+        ->with('main',    $main);
     }
 
     /**
@@ -125,7 +125,7 @@ class HorarioController extends AppBaseController
 
         return view('horarios.edit')
         ->with('horario', $horario)
-        ->with('main', $main);
+        ->with('main',    $main);
     }
 
     /**

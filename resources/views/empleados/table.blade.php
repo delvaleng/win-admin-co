@@ -45,6 +45,5 @@
         <th>Usuario</th>
       </tr>
     </tfoot>
-
   </table>
 </div>

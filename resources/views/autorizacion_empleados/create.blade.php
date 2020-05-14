@@ -1,19 +1,20 @@
 @extends('layouts.app')
+@section('title', 'Autorizacion Empleados')
 
 @section('content')
-    <section class="content-header">
-        <h1>
-            Autorizacion Empleado
-        </h1>
-    </section>
-    <div class="content">
-        @include('adminlte-templates::common.errors')
-        <div class="box box-primary">
-            <div class="box-body">
-                <div class="row">
+<section class="content-header">
+  <h1>
+    Autorizacion Empleado
+  </h1>
+</section>
 
-                </div>
-            </div>
-        </div>
+<div class="content">
+  @include('adminlte-templates::common.errors')
+  <div class="box box-primary">
+    <div class="box-body">
+      <div class="row">
+      </div>
     </div>
+  </div>
+</div>
 @endsection

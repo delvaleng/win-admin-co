@@ -15,9 +15,7 @@
 
 <div class="content">
   <div class="clearfix"></div>
-
   @include('flash::message')
-
   <div class="clearfix"></div>
   <div class="box box-primary">
     <div class="box-body">
@@ -35,34 +33,34 @@
 <script src="{{ asset('plugins/DataTable/Responsive-2.2.2/js/dataTables.responsive.js') }}"></script>
 <script type="text/javascript">
 
-$.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+  $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
 
-  var table;
-  table = $('#empleados-table').dataTable({
-    'responsive'  : true,
-    'autoWidth': false,
-    'destroy'   : true,
-    'responsive'  : true,
-    'language': {
-       "decimal": "",
-       "emptyTable": "No hay información",
-       "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-       "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-       "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-       "infoPostFix": "",
-       "thousands": ",",
-       "lengthMenu": "Mostrar _MENU_ Entradas",
-       "loadingRecords": "Cargando...",
-       "processing": "Procesando...",
-       "search": "Buscar:",
-       "zeroRecords": "Sin resultados encontrados",
-       "paginate": {
-         "first": "Primero",
-         "last": "Ultimo",
-         "next": "Siguiente",
-         "previous": "Anterior"
-       }
-     },
-  });
+    var table;
+    table = $('#empleados-table').dataTable({
+      'responsive'  : true,
+      'autoWidth': false,
+      'destroy'   : true,
+      'responsive'  : true,
+      'language': {
+         "decimal": "",
+         "emptyTable": "No hay información",
+         "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+         "infoPostFix": "",
+         "thousands": ",",
+         "lengthMenu": "Mostrar _MENU_ Entradas",
+         "loadingRecords": "Cargando...",
+         "processing": "Procesando...",
+         "search": "Buscar:",
+         "zeroRecords": "Sin resultados encontrados",
+         "paginate": {
+           "first": "Primero",
+           "last": "Ultimo",
+           "next": "Siguiente",
+           "previous": "Anterior"
+         }
+       },
+    });
 </script>
 @endsection

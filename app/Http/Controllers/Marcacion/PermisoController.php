@@ -32,7 +32,7 @@ class PermisoController extends AppBaseController
         $permisos = $this->permisoRepository->all();
 
         return view('permisos.index')
-            ->with('permisos', $permisos);
+        ->with('permisos', $permisos);
     }
 
     /**
@@ -80,7 +80,8 @@ class PermisoController extends AppBaseController
             return redirect(route('permisos.index'));
         }
 
-        return view('permisos.show')->with('permiso', $permiso);
+        return view('permisos.show')
+        ->with('permiso', $permiso);
     }
 
     /**
@@ -100,7 +101,8 @@ class PermisoController extends AppBaseController
             return redirect(route('permisos.index'));
         }
 
-        return view('permisos.edit')->with('permiso', $permiso);
+        return view('permisos.edit')
+        ->with('permiso', $permiso);
     }
 
     /**

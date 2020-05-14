@@ -15,11 +15,9 @@
         <th>IP</th>
       </tr>
     </thead>
-
     <tbody>
 
     </tbody>
-
     <tfoot>
       <tr>
         <th>N°</th>
