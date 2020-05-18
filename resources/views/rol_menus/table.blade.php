@@ -12,16 +12,16 @@
     </thead>
     <tbody>
 
-  </tbody>
-  <tfoot>
-    <tr>
-      <th>Acci&oacute;n</th>
-      <th>Rol</th>
-      <th>Men&uacute;</th>
-      <th>Nota</th>
-      <th>Modificado por</th>
-      <th>Estatus</th>
-    </tr>
-  </tfoot>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Acci&oacute;n</th>
+        <th>Rol</th>
+        <th>Men&uacute;</th>
+        <th>Nota</th>
+        <th>Modificado por</th>
+        <th>Estatus</th>
+      </tr>
+    </tfoot>
   </table>
 </div>
