@@ -150,8 +150,7 @@ class UserController extends Controller
     $users = [];
     $t     = $this->PermisosUser();
 
-    $usersQuery = User::where('status', '=', 'TRUE')
-    ->with('getCountry', 'getModifyBy')
+    $usersQuery = User::with('getCountry', 'getModifyBy')
     ->orderBy('created_at', 'asc')
     ->get();
 
