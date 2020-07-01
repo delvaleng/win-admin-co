@@ -21,18 +21,18 @@ class DatabaseSeeder extends Seeder
            'roles',
            'rol_users',
            'tp_marcacions',
-           'tp_documento_identidads'
+           'tp_document_idents'
        ]);
 
         $this->call([
           CountryTableSeeder::class,
           UserTableSeeder::class,
           MainTableSeeder::class,
-          RoleTableSeeder::class,
+          RolesTableSeeder::class,
           RolMainTableSeeder::class,
           RolUserTableSeeder::class,
           TpMarcacionTableSeeder::class,
-          TpDocumentoIdentidadTableSeeder::class,
+          TpDocumentIdentTableSeeder::class,
         ]);
 
 

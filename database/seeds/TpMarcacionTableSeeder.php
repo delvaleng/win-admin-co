@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\General\TpMarcacion;
+use App\Models\Admin\TpMarcacion;
 
 
 class TpMarcacionTableSeeder extends Seeder

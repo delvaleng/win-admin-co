@@ -13,14 +13,14 @@ class CountryTableSeeder extends Seeder
     public function run()
     {
       Country::create([
-        'country_name'         => 'PERU',
-        'area_code'            => 'PE',
-        'code'                 => '+51',
-        'national_currency'    => 'SOLES',
-        'national_symbol'      => 'S/.',
+        'country_name'         => 'COLOMBIA',
+        'area_code'            => 'CO',
+        'code'                 => '+57',
+        'national_currency'    => 'PESOS',
+        'national_symbol'      => '$.',
         'foreign_currency'     => 'DOLAR',
         'foreign_symbol'       => '$',
-        'convert_mount'        => 3.4,
+        'convert_mount'        => 3.500,
         'status'               => TRUE,
      ]);
     }

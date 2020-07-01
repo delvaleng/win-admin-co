@@ -6,8 +6,8 @@
 
 <!-- Descripcion Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('description', 'Descripci&oacute;n:') !!}
-  <p>{!! $tpRol->description !!}</p>
+  {!! Form::label('role_name', 'Descripci&oacute;n:') !!}
+  <p>{!! $tpRol->role_name !!}</p>
 </div>
 
 <!-- Status Field -->

@@ -12,12 +12,20 @@ class RolMainTableSeeder extends Seeder
      */
     public function run()
     {
-      $menu = 5;
+      $menu = 22;
       for ($i = 1; $i <= $menu; $i++) {
         RolMain::create([
           'role_id'  => '1',
           'main_id'  => $i,
         ]);
       }
+      RolMain::create([
+        'role_id'  => '2',
+        'main_id'  => 23,
+      ]);
+      RolMain::create([
+        'role_id'  => '2',
+        'main_id'  => 24,
+      ]);
     }
 }

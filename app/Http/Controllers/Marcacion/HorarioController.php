@@ -2,25 +2,39 @@
 
 namespace App\Http\Controllers\Marcacion;
 
-use App\Http\Requests\CreateHorarioRequest;
-use App\Http\Requests\UpdateHorarioRequest;
-use App\Repositories\HorarioRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
-use App\Models\General\Main;
+use App\Models\Marcaciones\Horario;
+
+use App\Models\Admin\RolUser;
+use App\Models\Admin\RolMain;
+use App\Models\Admin\Main;
 use App\Classes\MainClass;
+
 use Flash;
 use Response;
 
 class HorarioController extends AppBaseController
 {
-    /** @var  HorarioRepository */
-    private $horarioRepository;
+  private $menuid = 15;
 
-    public function __construct(HorarioRepository $horarioRepo)
-    {
-        $this->horarioRepository = $horarioRepo->with('horarioEmpleado');
+  public function validPermisoMenu() {
+    $roles = RolUser::where('user_id', auth()->user()->id)->get();
+    foreach ($roles as $key) {
+      if($key->role_id == 1){
+        return true;
+      }
+      else{
+        $menu = RolMain::where('role_id', $key->role_id)
+        ->where('main_id', $this->menuid)->first();
+        if($menu){
+          return true;
+        }
+      }
     }
+    return false;
+  }
+
 
     /**
      * Display a listing of the Horario.
@@ -29,12 +43,18 @@ class HorarioController extends AppBaseController
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
       $main = new MainClass();
       $main = $main->getMain();
 
-        $horarios = $this->horarioRepository->all();
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
+
+        $horarios = Horario::all();
 
         return view('horarios.index')
         ->with('horarios', $horarios)
@@ -51,6 +71,11 @@ class HorarioController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
       $horario = null;
 
         return view('horarios.create')
@@ -65,15 +90,15 @@ class HorarioController extends AppBaseController
      *
      * @return Response
      */
-    public function store(CreateHorarioRequest $request)
+    public function store()
     {
-        $input = $request->all();
+        $input = request()->all();
 
-        $horario = $this->horarioRepository->create($input);
+        $horario = Horario::create($input);
 
         Flash::success('Horario guardado exitosamente.');
 
-        return redirect(route('horarioUsers.show', [$horario->id_horario_user]));
+        return redirect(route('marcaciones-conf-horarios.show', [$horario->id_horario_user]));
 
         // return redirect(route('horarios.index'));
     }
@@ -90,7 +115,12 @@ class HorarioController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $horario = $this->horarioRepository->find($id);
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
+        $horario = Horario::find($id);
 
         if (empty($horario)) {
             Flash::error('Horario no encontrado');
@@ -115,7 +145,12 @@ class HorarioController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $horario = $this->horarioRepository->find($id);
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
+        $horario = Horario::find($id);
 
         if (empty($horario)) {
             Flash::error('Horario no encontrado');
@@ -136,9 +171,9 @@ class HorarioController extends AppBaseController
      *
      * @return Response
      */
-    public function update($id, UpdateHorarioRequest $request)
+    public function update($id)
     {
-        $horario = $this->horarioRepository->find($id);
+        $horario = Horario::find($id);
 
         if (empty($horario)) {
             Flash::error('Horario no encontrado');
@@ -146,11 +181,11 @@ class HorarioController extends AppBaseController
             return redirect(route('horarios.index'));
         }
 
-        $horario = $this->horarioRepository->update($request->all(), $id);
+        $horario->update(request()->all());
 
         Flash::success('Horario actualizado exitosamente.');
 
-        return redirect(route('horarioUsers.show', [$horario->id_horario_user]));
+        return redirect(route('marcaciones-conf-horarios.show', [$horario->id_horario_user]));
 
         // return redirect(route('horarios.index'));
     }
@@ -166,7 +201,7 @@ class HorarioController extends AppBaseController
      */
     public function destroy($id)
     {
-        $horario = $this->horarioRepository->find($id);
+        $horario = Horario::find($id);
 
         if (empty($horario)) {
             Flash::error('Horario no encontrado');
@@ -174,10 +209,10 @@ class HorarioController extends AppBaseController
             return redirect(route('horarios.index'));
         }
 
-        $this->horarioRepository->delete($id);
+        $horario->delete();
 
         Flash::success('Horario eliminado exitosamente.');
 
-        return redirect(route('horarios.index'));
+        return redirect(route('marcaciones-conf-horarios.show', [$horario->id_horario_user]));
     }
 }

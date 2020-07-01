@@ -1,28 +1,22 @@
+$.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+
 $(document).ready(function(){
   var f = new Date();
 
-  $('#birthdate').datepicker({
-      today: "",
-      clear: "Clear",
-      autoclose: true,
-      format: "yyyy/mm/dd",
-      startDate: "1900/01/01",
-      endDate:  f.getFullYear() + "/" + (f.getMonth() +1) + "/" + f.getDate()
-    }).val('');
   $('.select2').select2();
 
   $("#myform").validate({
     rules: {
-      address:     {  required: true, minlength: 5, maxlength: 500        },
-      password:    {  required: true, minlength: 6  },
-      first_name:  {  minlength: 2 },
-      last_name:   {  minlength: 4 },
+      first_name:  {  minlength: 2, lettersonly: true },
+      last_name:   {  minlength: 4, lettersonly: true },
+      ndocumento:  {  minlength: 6, number: true },
+      employe:     {  required: true, },
       phone:       {  minlength: 10 },
-      dni:         {  minlength: 18, uniqueDNIDB: true },
-      gender:      {  required: true, },
+      email:       {  email: true },
+      country:     {  required: true },
       'id_rol[]':  {  required: true, },
       username:    {  required: true, minlength: 4, uniqueDB: true      },
-
+      password:    {  required: true, minlength: 6  },
     },
     onkeyup :false,
     errorPlacement : function(error, element) {
@@ -49,41 +43,49 @@ $(document).ready(function(){
 
 
 jQuery.validator.addMethod("lettersonly", function(value, element) {
-  return this.optional(element) || /^[ a-z0-9áéíóúüñ]*$/i.test(value);
+  return this.optional(element) || /^[ a-zA-Záéíóúüñ]*$/i.test(value);
 }, "Este campo solo permite datos alfabeticos");
 
-// $.validator.addMethod('passwordCheck', function(value, element) {
-//   var regex = /^[A-Za-z\d$@$!%*?&]{6,8}$/;
-//   var val   = regex.test(value);
-//   return this.optional(element) || val;
-// }, '- Minimo 6 caracteres <br> - Maximo 8 <br> - Al menos una letra mayúscula <br> - Al menos una letra minucula <br> - Al menos un dígito <br> - No espacios en blanco <br> - Al menos 1 caracter especial');
-
-var check =false;
-jQuery.validator.addMethod("uniqueDB", function(value, element) {
-  $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+$( "#username"  ).on('change', function() {
+  $.ajax({
+    type: "POST",
+    url: "/validUser",
+    dataType: "text",
+    data: { username: this.value },
+    success: function (data) {
+      if(data > 0){
+        $("#username").val('');
+        $("#username").closest('.form-group').removeClass('has-success').addClass('has-error');
+        $("#username").closest('.form-group').find('.help-block').html("Este documento de identidad ya se encuentra registrado.");
+      }else{
+        $("#username").closest('.form-group').removeClass('has-error').addClass('has-success');
+        $("#telefono").closest('.form-group').removeClass('has-default').addClass('has-success');
+        $("#username").closest('.form-group').find('.help-block').html('');
+      }
+    }
+  });
+});
+$( "#ndocumento").on('change', function() {
   $.ajax({
          type: "POST",
-         url: "/user/validUser",
+         url: "/validUserDni",
          dataType: "text",
-         data: { username: value },
-         success: function (response) { check = response;       }
-     });
-     return this.optional(element) || check;
-}, "Este usuario ya tiene cuenta");
+         data: { ndocumento : this.value },
+         success: function (data) {
+           if(data > 0){
+             $("#ndocumento").val('');
+             $("#ndocumento").closest('.form-group').removeClass('has-success').addClass('has-error');
+             $("#ndocumento").closest('.form-group').find('.help-block').html("Este documento de identidad ya se encuentra registrado.");
+           }else{
+             $("#telefono").closest('.form-group').removeClass('has-error').addClass('has-success');
+             $("#telefono").closest('.form-group').removeClass('has-default').addClass('has-success');
+             $("#telefono").closest('.form-group').find('.help-block').html('');
+           }
 
-
-var check =false;
-jQuery.validator.addMethod("uniqueDNIDB", function(value, element) {
-  $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
-  $.ajax({
-         type: "POST",
-         url: "/user/validUserDni",
-         dataType: "text",
-         data: { dni : value },
-         success: function (response) { check = response;       }
+          }
      });
-     return this.optional(element) || check;
-}, "Este usuario ya tiene cuenta");
+});
+
 
 
 $.fn.serializeObject = function(){
@@ -124,3 +126,11 @@ $.extend( $.validator.messages, {
     nieES: "Por favor, escribe un NIE válido.",
     cifES: "Por favor, escribe un CIF válido.",
 });
+
+
+
+// $.validator.addMethod('passwordCheck', function(value, element) {
+//   var regex = /^[A-Za-z\d$@$!%*?&]{6,8}$/;
+//   var val   = regex.test(value);
+//   return this.optional(element) || val;
+// }, '- Minimo 6 caracteres <br> - Maximo 8 <br> - Al menos una letra mayúscula <br> - Al menos una letra minucula <br> - Al menos un dígito <br> - No espacios en blanco <br> - Al menos 1 caracter especial');

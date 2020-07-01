@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             //Datos basicos:
             $table->string('username')->unique();
+            $table->text('ndocumento')->nullable();
             $table->text('first_name')->nullable();
             $table->text('last_name' )->nullable();
             //Datos de contacto:
@@ -27,10 +28,10 @@ class CreateUsersTable extends Migration
             $table->text  ('password');
             $table->rememberToken();
 
-            $table->boolean('employee')->nullable()->default(true);
-            $table->boolean('status'  )->nullable()->default(true);
-            $table->integer('created_by_id' )->nullable()->unsigned();
+            $table->boolean('employe')->nullable()->default(false);
             $table->integer('country_id')->default(null)->nullable();
+            $table->integer('created_by_id' )->nullable()->unsigned();
+            $table->boolean('status'  )->nullable()->default(true);
 
             $table->timestamps();
             $table->softDeletes();

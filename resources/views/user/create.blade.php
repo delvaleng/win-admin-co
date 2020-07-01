@@ -6,14 +6,10 @@
 <link rel="stylesheet" href="{{ asset('bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 <link rel="stylesheet" href="{{ asset('dist/css/AdminLTE.min.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/timepicker/bootstrap-timepicker.min.css') }}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.1/build/css/alertify.min.css" />
-<!-- include a theme -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.1/build/css/themes/default.min.css" />
-
+<link rel="stylesheet" href="{{ asset('alertify/css/alertify.min.css') }}">
 @endsection
 
 @section('content')
-
 
 <section class="content-header">
   <a href="{{ route('user.index') }}"  class="btn btn-info pull-right">Listado</a><br><br>
@@ -53,21 +49,21 @@
             </div> <!--  fin row -->
 
             <div class="row">
-              <div class="col-xs-6"><label for="Datos">CURP:</label>
+              <div class="col-xs-6"><label for="Datos">N&deg;Documento:</label>
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-addon"><i class="fa fa-500px"></i></div>
-                      {!! Form::text('dni', null,['id'=>'dni', 'class'=>'form-control required','placeholder' => 'CURP','maxlength'=>'18'] ) !!}
+                      {!! Form::text('ndocumento', null,['id'=>'ndocumento', 'class'=>'form-control required','placeholder' => 'N&deg;Documento','maxlength'=>'18'] ) !!}
                         <div class="input-group-addon"><code>*</code></div>
                     </div><div><span class="help-block" id="error"></span></div>
                 </div>
                 </div>
-              <div class="col-xs-6"><label for="Datos">Fecha de Nacimiento:</label>
+                <div class="col-xs-6"><label for="Datos">Empleado:</label><code>(*)</code>
                   <div class="form-group">
                     <div class="input-group">
-                      <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                        {!! Form::text('birthdate', date('Y-m-d') ,['id'=>'birthdate', 'class'=>'form-control required']) !!}
-                        <div class="input-group-addon"><code>*</code></div>
+                      <div class="input-group-addon"><i class="fa  fa-street-view"></i></div>
+                      <label class="radio-inline">  {!! Form::radio('employe', 'TRUE') !!} SI </label>
+                      <label class="radio-inline">  {!! Form::radio('employe', 'FALSE') !!} NO </label>
                     </div><div><span class="help-block" id="error"></span></div>
                   </div>
                 </div>
@@ -78,7 +74,7 @@
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                      {!! Form::text('phone', null,['id'=>'phone', 'class'=>'form-control required digits',  'placeholder' => '000 000 0000', 'maxlength'=>'11'] ) !!}
+                      {!! Form::text('phone', null,['id'=>'phone', 'class'=>'form-control required digits',  'placeholder' => '000-000-0000', 'maxlength'=>'10'] ) !!}
                         <div class="input-group-addon"><code>*</code></div>
                     </div><div><span class="help-block" id="error"></span></div>
                 </div>
@@ -104,15 +100,16 @@
                     </div><div><span class="help-block" id="error"></span></div>
                 </div>
                 </div>
-              <div class="col-xs-6"><label for="Datos">Dirección:</label>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-addon"><i class="fa fa-marker"></i></div>
-                      {!! Form::textarea('address', null,['id'=>'address', 'class'=>'form-control required', 'value'=> old('address'),  'placeholder'=>'Av/Calle/Edificio...', 'rows'=>'2'] ) !!}
+
+                <div class="col-xs-6"><label for="Datos">Roles:</label>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-cogs"></i></div>
+                        {!! Form::select('id_rol', $roles, null, ['id'=>'id_rol', 'name'=>'id_rol[]', 'class'=>'form-control select2', 'multiple'=>'multiple', 'style'=>'width: 100%'] ) !!}
                         <div class="input-group-addon"><code>*</code></div>
-                    </div><div><span class="help-block" id="error"></span></div>
+                      </div><div><span class="help-block" id="error"></span></div>
+                    </div>
                   </div>
-                </div>
             </div> <!--  fin row -->
 
             <div class="row">
@@ -136,27 +133,6 @@
                 </div>
             </div> <!--  fin row -->
 
-            <div class="row">
-              <div class="col-xs-6"><label for="Datos">Sexo:</label>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-addon"><i class="fa fa-venus-double"></i></div>
-                        <label class="radio-inline">  {!! Form::radio('gender', 'F') !!} Mujer </label>
-                        <label class="radio-inline">  {!! Form::radio('gender', 'M') !!} Hombre </label>
-                        <div class="input-group-addon"><code>*</code></div>
-                    </div><div><span class="help-block" id="error"></span></div>
-                </div>
-                </div>
-              <div class="col-xs-6"><label for="Datos">Roles:</label>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-addon"><i class="fa fa-cogs"></i></div>
-                      {!! Form::select('id_rol', $roles, null, ['id'=>'id_rol', 'name'=>'id_rol[]', 'class'=>'form-control select2', 'multiple'=>'multiple', 'style'=>'width: 100%'] ) !!}
-                      <div class="input-group-addon"><code>*</code></div>
-                    </div><div><span class="help-block" id="error"></span></div>
-                  </div>
-                </div>
-            </div> <!--  fin row -->
 
         {{-- Fin:  Usuario --}}
 
@@ -172,26 +148,13 @@
 </section>
 
 
-
-
-
-
-
-
 @endsection
 
 @section('js')
 
 <script src="{{ asset('plugins/jqueryvalidate/jquery.min.js') }}"></script>
 <script src="{{ asset('plugins/jqueryvalidate/jquery.validate.min.js') }}"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.1/build/alertify.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.1/build/alertify.min.js"></script>
-<script src="https://adminlte.io/themes/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
-<script src="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-
-
+<script src="{{ asset('alertify/js/alertify.min.js') }}"></script>
 <script src="{{ asset('bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('plugins/jquery/jQuery.print.js') }}"></script>
 <script src="{{ asset('js/User/create.js')}}"></script>

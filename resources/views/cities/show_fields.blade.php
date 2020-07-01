@@ -4,17 +4,23 @@
   <p>{!! $city->id !!}</p>
 </div> -->
 
-<!-- City Field -->
-<div class="form-group col-sm-6">
-  {!! Form::label('city', 'Ciudad:') !!}
-  <p>{!! $city->city !!}</p>
-</div>
-
 <!-- Id Departament Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('id_departament', 'Departamento:') !!}
-  <p>{!! $city->getDepartament->departament !!}</p>
+  {!! Form::label('country_id', 'Pais:') !!}
+  <p>{!! $city->getStateCountry[0]->country_name !!}</p>
 </div>
+
+<div class="form-group col-sm-6">
+  {!! Form::label('state_id', 'Departamento:') !!}
+  <p>{!! $city->getState->state_name !!}</p>
+</div>
+
+<!-- City Field -->
+<div class="form-group col-sm-6">
+  {!! Form::label('city_name', 'Ciudad:') !!}
+  <p>{!! $city->city_name !!}</p>
+</div>
+
 
 <!-- Status Field -->
 <div class="form-group col-sm-6">

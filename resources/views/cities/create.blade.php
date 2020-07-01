@@ -12,7 +12,7 @@
   <div class="box box-primary">
     <div class="box-body">
       <div class="row">
-        {!! Form::open(['route' => 'ciudad.store']) !!}
+        {!! Form::open(['route' => 'ciudades.store']) !!}
           @include('cities.fields')
         {!! Form::close() !!}
       </div>

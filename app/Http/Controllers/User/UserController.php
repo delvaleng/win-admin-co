@@ -6,24 +6,51 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\General\Country;
-use App\Models\General\User;
-use App\Models\General\Rol_User;
-use App\Models\General\Roles;
+
+use App\Models\Admin\RolPermissions;
+use App\Models\Admin\Permission;
+use App\Models\Admin\RolUser;
+use App\Models\Admin\Roles;
+use App\Models\Admin\Main;
+use App\Models\Admin\User;
+
+use App\Models\Admin\Country;
 use App\Models\Views\vw_menu_roles;
-use App\Models\General\Rol_permissions;
-use App\Models\General\Permission;
-use App\Models\General\Main;
+
 use App\Classes\MainClass;
 use \stdClass;
+use Flash;
+use Auth;
+
 
 class UserController extends Controller
 {
+  private $menuid = 8;
+
   public function __construct(){
-		$this->middleware('auth');
-	}
+
+    $this->middleware('auth');
+  }
+
+  public function validPermisoMenu() {
+    $roles = RolUser::where('user_id', auth()->user()->id)->get();
+    foreach ($roles as $key) {
+      if($key->role_id == 1){
+        return true;
+      }
+      else{
+        $menu = RolMain::where('role_id', $key->role_id)
+        ->where('main_id', $this->menuid)->first();
+        if($menu){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   public function UserPermisos(){
+
     $a = new stdClass();
     $a->view     = false;
     $a->create   = false;
@@ -39,145 +66,140 @@ class UserController extends Controller
 
     $main = new MainClass();
     $main = $main->getMain();
-    $roles = Roles::WHERE('status_system', '=', 'TRUE')->where('status_user', '=', 'TRUE')
-                   ->orderBy('description', 'ASC')->pluck('description', 'id');
 
-    $title ='Listado de Usuarios';
-    $users = User::where('status_system', '=', 'TRUE')
-             ->with('getCountry', 'getModifyBy')
-             ->orderBy('created_at', 'asc')
-             ->get();
+    $roles    = Roles     ::WHERE('status', '=', 'TRUE')->orderBy('role_name', 'ASC')->pluck('role_name', 'id');
+    $users    = User      ::WHERE('status', '=', 'TRUE')->with('getCountry', 'getModifyBy')->orderBy('username', 'asc')->get();
+    $permisos = Permission::WHERE('status', '=', 'TRUE')->pluck('permission_name', 'id');
 
-   $permisos = Permission::where('status_system', '=', 'TRUE')
-            ->pluck('description', 'id');
-
-    $t = $this->PermisosUser();
-    $permisover = $t->view;
-    $rolid = $t->rolid;
-
-    if ($permisover == true || $rolid == 2){
-      return view('user.index',compact('users', 'main', 'title', 'roles','permisos'));
-      //return $tickets;
-    }else{
+    $valor = $this->validPermisoMenu();
+    if ($valor == false){
       return view('errors.403', compact('main'));
     }
-
+    return view('user.index',compact('users', 'main', 'roles','permisos'));
   }
 
   public function create(){
+
     $main    = new MainClass();
     $main    = $main->getMain();
 
-    $roles = Roles::WHERE('status_system', '=', 'TRUE')->where('status_user', '=', 'TRUE')
-                   ->orderBy('description', 'ASC')->pluck('description', 'id');
+    $roles    = Roles     ::WHERE('status', '=', 'TRUE')->orderBy('role_name', 'ASC')->pluck('role_name', 'id');
+    $users    = User      ::WHERE('status', '=', 'TRUE')->with('getCountry', 'getModifyBy')->orderBy('username', 'asc')->get();
+    $permisos = Permission::WHERE('status', '=', 'TRUE')->pluck('permission_name', 'id');
 
-    $country = Country::WHERE('status', '=', 'TRUE')
-                ->orderBy('country', 'ASC')->pluck('country', 'id');
+
+    $country = Country::WHERE('status', '=', 'TRUE')->orderBy('country_name', 'ASC')->pluck('country_name', 'id');
 
     $t = $this->PermisosUser();
     $permisocrear = $t->create;
     $rolid = $t->rolid;
 
-    if ($permisocrear == true || $rolid == 2){
+    if ($permisocrear == true || $rolid == 1){
       return view('user.create', compact('main', 'roles', 'country'));
     }else{
       return view('errors.403', compact('main'));
     }
+
   }
 
   public function store (){
     try{
       DB::beginTransaction();
       $data =[
-        'name'         => mb_strtoupper(request()->first_name),
-        'lastname'     => mb_strtoupper(request()->last_name),
-        'dni'          => request()->dni,
-        'address'      => request()->address,
+        'username'     => mb_strtolower(request()->username),
+        'ndocumento'   => request()->ndocumento,
+        'first_name'   => mb_strtoupper(request()->first_name),
+        'last_name'    => mb_strtoupper(request()->last_name),
         'phone'        => request()->phone,
-        'email'        => request()->email,
-        'gender'       => request()->gender,
+        'email'        => mb_strtolower(request()->email),
+        'employe'      => request()->employe,
         'birthdate'    => request()->birthdate,
-        'username'     => request()->username,
         'password'     => Hash::make(request()->password),
-        'id_country'   => request()->cod_country,
+        'country_id'   => request()->cod_country,
+        'created_by_id'=> auth()->user()->id,
+
       ];
 
       $id_user = User::create($data)->id;
       $roles   = request()->id_rol;
       foreach ($roles as $r) {
         $userRole =[
-          'id_role'         => $r,
-          'id_user'        => $id_user,
+          'role_id'        => $r,
+          'user_id'        => $id_user,
         ];
-        Rol_User::create($userRole);
+        RolUser::create($userRole);
 
     }
 
       DB::commit();
      }catch(\Exception $e){
           DB::rollback();
-          dd($e);
-      }
+          Flash::error('Su usuario no puedo ser registrado.');
+          return  redirect()->route('user.index');
 
-   return  redirect()->route('user.create');
+          // dd($e);
+
+      }
+      Flash::success('Usuario guardado con éxito.');
+
+      return  redirect()->route('user.index');
   }
 
-  public function usersAll(){
-    if (request()->ajax( )){
+  public function getUsers(){
 
-      $t = $this->PermisosUser();
+    $users = [];
+    $t     = $this->PermisosUser();
 
+    $usersQuery = User::where('status', '=', 'TRUE')
+    ->with('getCountry', 'getModifyBy')
+    ->orderBy('created_at', 'asc')
+    ->get();
 
-      $usersQuery = User::where('status_system', '=', 'TRUE')
-      ->with('getCountry', 'getModifyBy')
-      ->orderBy('created_at', 'asc')
-      ->get();
-      $users = [];
-      foreach ($usersQuery as $r) {
-        $status  = ($r->status_user === TRUE)? "FALSE" : "TRUE";
-        $titleSt = ($r->status_user === TRUE)? 'Activo' : 'Inactivo';
-        $iconSt  = ($r->status_user === TRUE)? 'fa-check-square-o' : 'fa-close';
+    foreach ($usersQuery as $r) {
+        $status  = ($r->status === TRUE)? "FALSE" : "TRUE";
+        $titleSt = ($r->status === TRUE)? 'Activo' : 'Inactivo';
+        $iconSt  = ($r->status === TRUE)? 'fa-check-square-o' : 'fa-close';
 
-        $action  = ($t->view == true || $t->rolid == '2') ?
+        $action  = ($t->view == true || $t->rolid == 1) ?
                     '<a data-toggle="modal" data-target="#modal-show" class="btn-modalShow" data-id="'.$r->id.'"><i class="fa fa-eye" title="Ver Usuario"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;' : '';
 
-        $action  .= ($t->rol == true || $t->rolid == '2') ?
+        $action  .= ($t->rol == true || $t->rolid == 1) ?
                     '<a data-toggle="modal" data-target="#modal-rol" class="btn-modalRol" data-id="'.$r->id.'"><i class="fa fa-cogs" title="Ver Roles"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;' : '';
 
-        $action  .= ($t->view == true || $t->rolid == '2')?
+        $action  .= ($t->view == true || $t->rolid == 1)?
                     '<a data-toggle="modal" data-target="#modal-permisos" class="btn-modalPermisos" data-id="'.$r->id.'"><i class="fa fa-unlock-alt" title="Asignar Permisos"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;' : '';
 
 
-        $action  .= ($t->password == true || $t->rolid == '2')?
+        $action  .= ($t->password == true || $t->rolid == 1)?
                     '<a data-toggle="modal" data-target="#modal-passw" class="btn-modalPass" data-id="'.$r->id.'"><i class="fa fa-key" title="Cambiar Password"></i></a>' : '';
 
-        $status = ($t->delete == true || $t->rolid == '2')?
+        $status = ($t->delete == true || $t->rolid == 1)?
                   '<a status="'.$status.'"  data-id="'.$r->id.'" id="status"><i class="fa '.$iconSt.'" title='.$titleSt.'></i></a>' : '';
 
         $user   = [
           'action'       => $action,
           'username'     => $r->username,
-          'name'         => $r->name.' '.$r->lastname,
-          'dni'          => $r->dni,
+          'name'         => $r->first_name.' '.$r->last_name,
+          'ndocumento'   => ($r->ndocumento)? $r->ndocumento : '-',
           'phone'        => $r->phone,
           'email'        => $r->email,
-          'id_country'   => $r->getCountry->country,
-          'usermodifyby' => $r->getModifyBy->username,
-          'status_user'  => $status
+          'id_country'   => ($r->country_id   )?  $r->getCountry->country_name  : '',
+          'usermodifyby' => ($r->created_by_id)?  $r->getModifyBy->username     : '-',
+          'status'       => $status
         ];
         array_push($users, $user);
       }
 
 
-      return response()->json([
-        'data' => $users,
-      ]);
-    }
+    return response()->json([
+      'data' => $users,
+    ]);
+
   }
 
   public function userDetails(){
     if (request()->ajax( )){
-        $user = User::where('status_system', '=', 'TRUE')
+        $user = User::where('status', '=', 'TRUE')
         ->where('id', '=', request()->id)
         ->with('getCountry', 'getModifyBy', 'getRoles')
         ->orderBy('created_at', 'asc')
@@ -194,11 +216,10 @@ class UserController extends Controller
 
     if (request()->ajax( )){
 
-      $rol_user =  Rol_User::where('rol_user.id_user', '=', request()->id)
-         ->join('vw_menu_roles', 'vw_menu_roles.id_rol', '=', 'rol_user.id_role')
-         ->join('main', 'main.id', '=', 'vw_menu_roles.id')
-         ->select('main.description as main', 'vw_menu_roles.ramanombre',
-         'vw_menu_roles.id',  'vw_menu_roles.id_rol','vw_menu_roles.descripcion as rol')
+      $rol_user =  RolUser::where('rol_users.user_id', '=', request()->id)
+         ->join('v_menu_roles', 'v_menu_roles.role_id', '=', 'rol_users.role_id')
+         ->join('main', 'main.id', '=', 'v_menu_roles.id')
+         ->select('main.main_name as main', 'v_menu_roles.ramanombre','v_menu_roles.id',  'v_menu_roles.role_id','v_menu_roles.role_name as rol')
          ->get();
 
       return response()->json([
@@ -215,12 +236,12 @@ class UserController extends Controller
 
 
       $rol = Main::where('users.id', '=', request()->id)
-        ->where('main.status_user', '=', 'TRUE')
+        ->where('main.status', '=', 'TRUE')
         ->join('rol_main', 'main.id',               '=',   'rol_main.id_main')
-        ->join('roles',    'roles.id',              '=',   'rol_main.id_role')
-        ->join('rol_user', 'rol_user.id_role',      '=',   'roles.id')
-        ->join('users',    'users.id',              '=',   'rol_user.id_user')
-        ->select('roles.id','rol_user.id as id_roluser')
+        ->join('roles',    'roles.id',              '=',   'rol_main.role_id')
+        ->join('RolUser', 'RolUser.role_id',      '=',   'roles.id')
+        ->join('users',    'users.id',              '=',   'RolUser.id_user')
+        ->select('roles.id','RolUser.id as id_roluser')
         ->first();
 
       $roluser = $rol{'id_roluser'};
@@ -236,9 +257,6 @@ class UserController extends Controller
         ]);
       }
   }
-
-
-
 
   public function rolDetailsSelect(){
 
@@ -266,27 +284,27 @@ class UserController extends Controller
         $id_user  = request()->id_user;
 
         $rol = Main::where('users.id', '=', $id_user)
-          ->where('main.status_user', '=', 'TRUE')
+          ->where('main.status', '=', 'TRUE')
           ->join('rol_main', 'main.id',               '=',   'rol_main.id_main')
-          ->join('roles',    'roles.id',              '=',   'rol_main.id_role')
-          ->join('rol_user', 'rol_user.id_role',      '=',   'roles.id')
-          ->join('users',    'users.id',              '=',   'rol_user.id_user')
-          ->select('roles.id','rol_user.id as id_roluser')
+          ->join('roles',    'roles.id',              '=',   'rol_main.role_id')
+          ->join('RolUser', 'RolUser.role_id',      '=',   'roles.id')
+          ->join('users',    'users.id',              '=',   'RolUser.id_user')
+          ->select('roles.id','RolUser.id as id_roluser')
           ->first();
         $roluser = $rol{'id_roluser'};
 
         $permissions = Rol_permissions::where('id_roluser', '=', $roluser);
         $permissions->delete();
 
-        $Rol_User = Rol_User::where('id_user', '=', $id_user);
-        $Rol_User->delete();
+        $RolUser = RolUser::where('id_user', '=', $id_user);
+        $RolUser->delete();
 
         foreach ($roles as $r) {
           $userRole =[
-            'id_role'        => $r,
+            'role_id'        => $r,
             'id_user'        => $id_user,
           ];
-          Rol_User::create($userRole);
+          RolUser::create($userRole);
         }
 
         DB::commit();
@@ -307,14 +325,14 @@ class UserController extends Controller
         DB::beginTransaction();
 
         $Permisos = request()->id_permisos;
-        $Rol_User  = request()->id_roluserp;
-        $permisos_User = Rol_permissions::where('id_roluser', '=', $Rol_User);
+        $RolUser  = request()->id_roluserp;
+        $permisos_User = Rol_permissions::where('id_roluser', '=', $RolUser);
         $permisos_User->delete();
 
         foreach ($Permisos as $r) {
           $userPermisos =[
             'id_permission'     => $r,
-            'id_roluser'        => $Rol_User,
+            'id_roluser'        => $RolUser,
           ];
           Rol_permissions::create($userPermisos);
         }
@@ -329,28 +347,16 @@ class UserController extends Controller
       }
   }
 
-
-
   public function validUser(){
-    $num = true;
-    if (request()->ajax( )){
-        $user = User::where('status_system', '=', 'TRUE')
-        ->where('username', '=', request()->username)
-        ->first();
-        if ($user) {$num = false;}
-        return response()->json($num);
-      }
+    $valor =  User::where('username', request()->username)
+      ->count();
+    return $valor;
   }
 
   public function validUserDni(){
-    $num = true;
-    if (request()->ajax( )){
-        $user = User::where('status_system', '=', 'TRUE')
-        ->where('dni', '=', request()->dni)
-        ->first();
-        if ($user) {$num = false;}
-        return response()->json($num);
-      }
+    $valor =  User::where('ndocumento', request()->ndocumento)
+      ->count();
+    return $valor;
   }
 
   public function updatePassword(){
@@ -361,7 +367,6 @@ class UserController extends Controller
         DB::beginTransaction();
 
           $user->password = Hash::make(request()->password);
-          $user->note     = request()->note;
           $user->save();
 
         DB::commit();
@@ -379,7 +384,7 @@ class UserController extends Controller
       $user = User::findOrFail(request()->id);
       try{
         DB::beginTransaction();
-          $user->status_user = request()->status;
+          $user->status = request()->status;
           $user->save();
         DB::commit();
       }catch(\Exception $e){  DB::rollback(); }
@@ -400,36 +405,36 @@ class UserController extends Controller
   public function PermisosUser(){
 
     $rol = Main::where('users.id', '=', auth()->user()->id)
-      ->where('main.status_user', '=', 'TRUE')
-      ->join('rol_main', 'main.id',               '=',   'rol_main.id_main')
-      ->join('roles',    'roles.id',              '=',   'rol_main.id_role')
-      ->join('rol_user', 'rol_user.id_role',      '=',   'roles.id')
-      ->join('users',    'users.id',              '=',   'rol_user.id_user')
-      ->select('roles.id','rol_user.id as id_roluser')
+      ->where('main.status', '=', 'TRUE')
+      ->join('rol_main',   'main.id',               '=',   'rol_main.main_id')
+      ->join('roles',      'roles.id',              '=',   'rol_main.role_id')
+      ->join('rol_users',  'rol_users.role_id',     '=',   'roles.id')
+      ->join('users',      'users.id',              '=',   'rol_users.user_id')
+      ->select('roles.id','rol_users.id as rol_user_id')
       ->first();
 
-    $roluser = $rol{'id_roluser'};
+    $roluser = $rol{'rol_user_id'};
 
     $t = $this->UserPermisos();
 
-    $permissions = Rol_permissions::where('id_roluser', '=', $roluser)
-                  ->select('id_permission')
+    $permissions = RolPermissions::where('rol_user_id', '=', $roluser)
+                  ->select('permission_id')
                   ->get();
 
     foreach ($permissions as $rs) {
-      if ($rs->id_permission == 3){
+      if ($rs->permission_id == 3){
          $t->create = true;
-      }else if ($rs->id_permission == 5){
+      }else if ($rs->permission_id == 5){
          $t->view = true;
-      }else if ($rs->id_permission == 3){
+      }else if ($rs->permission_id == 3){
          $t->edit = true;
-      }else if ($rs->id_permission == 4){
+      }else if ($rs->permission_id == 4){
          $t->delete = true;
-      }else if ($rs->id_permission == 6){
+      }else if ($rs->permission_id == 6){
          $t->reporte = true;
-      }else if ($rs->id_permission == 7){
+      }else if ($rs->permission_id == 7){
          $t->rol = true;
-      }else if ($rs->id_permission == 8){
+      }else if ($rs->permission_id == 8){
          $t->password = true;
       }
     }
@@ -438,13 +443,59 @@ class UserController extends Controller
 
     return $t;
   }
+
   public function getRolValid()
   {
-    $externo = Rol_User::where('id_user', auth()->user()->id)->where('id_role', 7);
-    if (Rol_User::where('id_user', auth()->user()->id)->where('id_role', 7)->exists()){
+    $externo = RolUser::where('id_user', auth()->user()->id)->where('role_id', 7);
+    if (RolUser::where('id_user', auth()->user()->id)->where('role_id', 7)->exists()){
       return 'true';
     }
     return 'false';
+  }
+
+  public function miperfil(){
+
+
+    $main = new MainClass();
+    $main = $main->getMain();
+
+    $user = User::find(auth()->user()->id );
+    return view('user.perfil')
+    ->with('user', $user)
+    ->with('main', $main);
+
+  }
+
+  public function changePassword()
+  {
+    $main = new MainClass();
+    $main = $main->getMain();
+
+    return view('user.cambiarPassword')
+    ->with('main', $main);
+
+  }
+
+  public function savePassword()
+  {
+
+    $input = request()->all();
+
+    try{
+      DB::beginTransaction();
+      $dataUser =  [
+        'password'          => Hash::make($input{'password'}),
+      ];
+      $user = User::find(auth()->user()->id );
+      $user->update($dataUser);
+
+      DB::commit();
+      }catch(\Exception $e){
+        DB::rollback();
+        return  redirect('/');
+      }
+      Auth::logout();
+      return redirect('/')->with('error_message', 'Session Finalizada');
   }
 
 }

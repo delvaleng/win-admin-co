@@ -2,22 +2,9 @@
 @section('title', 'Saldo Conductor')
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/DataTable/datatables.min.css') }}"/>
+<link rel="stylesheet" href="{{ asset('css/table-small.css') }}"/>
 <link rel="stylesheet" href="{{ asset('alertify/css/alertify.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/perfil.css') }}">
-
-<style>
-  th, td { white-space: nowrap; }
-  div.dataTables_wrapper {
-    margin: 0 auto;
-  }
-
-  div.container {
-    width: 80%;
-  }
-  th { font-size: 12px; }
-  td { font-size: 11px; }
-  label { font-size: 12px; }
-</style>
 @endsection
 @section('content')
     <section class="content-header">

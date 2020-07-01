@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\General\Country;
+use App\Models\Admin\Country;
 use App\Repositories\BaseRepository;
 
 /**
@@ -17,8 +17,15 @@ class CountryRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
-        'country',
-        'status'
+      'country_name',
+      'area_code',
+      'code',
+      'national_currency',
+      'national_symbol',
+      'foreign_currency',
+      'foreign_symbol',
+      'convert_mount',
+      'status'
     ];
 
     /**
@@ -41,9 +48,7 @@ class CountryRepository extends BaseRepository
 
     public function with($relations) {
         if (is_string($relations)) $relations = func_get_args();
-
         $this->with = $relations;
-
         return $this;
     }
 }

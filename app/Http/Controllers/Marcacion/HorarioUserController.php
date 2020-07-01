@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Marcacion;
 
-use App\Http\Requests\CreateHorarioUserRequest;
-use App\Http\Requests\UpdateHorarioUserRequest;
-use App\Repositories\HorarioUserRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
-use App\Models\Empleado;
-use App\Models\Horario;
-use App\Models\HorarioUser;
-use App\Models\General\Main;
+use App\Models\Admin\User;
+use App\Models\Marcaciones\Horario;
+use App\Models\Marcaciones\HorarioUser;
+
+use App\Models\Admin\RolUser;
+use App\Models\Admin\RolMain;
+use App\Models\Admin\Main;
 use App\Classes\MainClass;
 
 use Illuminate\Support\Facades\DB;
@@ -19,13 +19,24 @@ use Response;
 
 class HorarioUserController extends AppBaseController
 {
-    /** @var  HorarioUserRepository */
-    private $horarioUserRepository;
+  private $menuid = 15;
 
-    public function __construct(HorarioUserRepository $horarioUserRepo)
-    {
-        $this->horarioUserRepository = $horarioUserRepo;
+  public function validPermisoMenu() {
+    $roles = RolUser::where('user_id', auth()->user()->id)->get();
+    foreach ($roles as $key) {
+      if($key->role_id == 1){
+        return true;
+      }
+      else{
+        $menu = RolMain::where('role_id', $key->role_id)
+        ->where('main_id', $this->menuid)->first();
+        if($menu){
+          return true;
+        }
+      }
     }
+    return false;
+  }
 
     /**
      * Display a listing of the HorarioUser.
@@ -34,12 +45,16 @@ class HorarioUserController extends AppBaseController
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
       $main = new MainClass();
       $main = $main->getMain();
 
-        $horarioUsers = $this->horarioUserRepository->all();
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+        $horarioUsers = HorarioUser::all();
 
         return view('horario_users.index')
         ->with('horarioUsers', $horarioUsers)
@@ -56,10 +71,15 @@ class HorarioUserController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-      $empleado       =  Empleado::where('status', TRUE)
-      ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
+      $empleado       =  User::where('status', TRUE)->where('employe', true)
+      ->select(DB::raw("UPPER(CONCAT(last_name,'  ', first_name)) AS name"), "users.id as id")
       ->orderBy('name',  'ASC')
-      ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
+      ->pluck( '(last_name||" " ||first_name)as name', 'users.id as id');
 
       $dias= [
         'Lunes'     =>'Lunes',
@@ -89,13 +109,13 @@ class HorarioUserController extends AppBaseController
         $data  = request()->all();
 
         $input = [
-          'id_empleado' => $data{'id_empleado'},
+          'id_user' => $data{'id_user'},
         ];
-        $existeHorarioUser = HorarioUser::where('id_empleado', $data{'id_empleado'} )->first();
+        $existeHorarioUser = HorarioUser::where('id_user', $data{'id_user'} )->first();
         if($existeHorarioUser){
           $id_horario_user =  $existeHorarioUser->id;
         }else {
-          $horarioUser = $this->horarioUserRepository->create($input);
+          $horarioUser = HorarioUser::create($input);
           $id_horario_user =  $horarioUser->id;
         }
 
@@ -121,7 +141,7 @@ class HorarioUserController extends AppBaseController
 
         Flash::success('Horario Usuarios guardado exitosamente.');
 
-        return redirect(route('horarioUsers.index'));
+        return redirect(route('marcaciones-conf-horarios.index'));
     }
 
     /**
@@ -136,15 +156,18 @@ class HorarioUserController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $horarioUser = $this->horarioUserRepository->find($id);
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+        $horarioUser = HorarioUser::find($id);
 
         if (empty($horarioUser)) {
-
             Flash::error('Horario Usuarios no encontrado');
-
-            return redirect(route('horarioUsers.index'));
+            return redirect(route('marcaciones-conf-horarios.index'));
         }
         $horarios  = Horario::where('id_horario_user', $id)->get();
+
         return view('horario_users.show')
         ->with('horarioUser', $horarioUser)
         ->with('horarios',    $horarios)
@@ -163,17 +186,22 @@ class HorarioUserController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $horarioUser = $this->horarioUserRepository->find($id);
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
+        $horarioUser = HorarioUser::find($id);
 
         if (empty($horarioUser)) {
             Flash::error('Horario Usuarios no encontrado');
 
-            return redirect(route('horarioUsers.index'));
+            return redirect(route('marcaciones-conf-horarios.index'));
         }
-        $empleado       =  Empleado::where('status', TRUE)
-        ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
+        $empleado       =  User::where('status', TRUE)->where('employe', true)
+        ->select(DB::raw("UPPER(CONCAT(last_name,'  ', first_name)) AS name"), "users.id as id")
         ->orderBy('name',  'ASC')
-        ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
+        ->pluck( '(last_name||" " ||first_name)as name', 'users.id as id');
 
         $dias= [
           'Lunes'     =>'Lunes',
@@ -201,9 +229,9 @@ class HorarioUserController extends AppBaseController
      *
      * @return Response
      */
-    public function update($id, UpdateHorarioUserRequest $request)
+    public function update($id)
     {
-        $horarioUser = $this->horarioUserRepository->find($id);
+        $horarioUser = HorarioUser::find($id);
 
         if (empty($horarioUser)) {
             Flash::error('Horario Usuarios no encontrado');
@@ -214,13 +242,13 @@ class HorarioUserController extends AppBaseController
         $data  = request()->all();
 
         $input = [
-          'id_empleado' => $data{'id_empleado'},
+          'id_user' => $data{'id_user'},
         ];
-        $existeHorarioUser = HorarioUser::where('id_empleado', $data{'id_empleado'} )->first();
+        $existeHorarioUser = HorarioUser::where('id_user', $data{'id_user'} )->first();
         if($existeHorarioUser){
           $id_horario_user =  $existeHorarioUser->id;
         }else {
-          $horarioUser = $this->horarioUserRepository->create($input);
+          $horarioUser = HorarioUser::create($input);
           $id_horario_user =  $horarioUser->id;
         }
 
@@ -246,7 +274,7 @@ class HorarioUserController extends AppBaseController
 
         Flash::success('Horario Usuarios actualizado exitosamente.');
 
-        return redirect(route('horarioUsers.index'));
+        return redirect(route('marcaciones-conf-horarios.show', [$id]));
     }
 
     /**
@@ -260,18 +288,18 @@ class HorarioUserController extends AppBaseController
      */
     public function destroy($id)
     {
-        $horarioUser = $this->horarioUserRepository->find($id);
+        $horarioUser = HorarioUser::find($id);
 
         if (empty($horarioUser)) {
             Flash::error('Horario Usuarios no encontrado');
 
-            return redirect(route('horarioUsers.index'));
+            return redirect(route('marcaciones-conf-horarios.index'));
         }
 
-        $this->horarioUserRepository->delete($id);
+        HorarioUser::delete($id);
 
         Flash::success('Horario Usuarios eliminado exitosamente.');
 
-        return redirect(route('horarioUsers.index'));
+        return redirect(route('marcaciones-conf-horarios.index'));
     }
 }

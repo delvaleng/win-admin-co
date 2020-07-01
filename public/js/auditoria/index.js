@@ -32,11 +32,20 @@ $(document).ready(function() {
     });
 });
 
-function buscar() {
+$("#clean"  ).click(function() {
+  //de acuerdo a los campos q quiero limpiar
+  $('#campo_search'   ).val('');
+});
+
+
+$("#search"  ).click(function() {
+  var formulario = $("#formIndexAuditoria").serializeObject();
+
   table = $('#auditoria-table').DataTable({
       'ajax': {
         'url': "/getAuditoria",
         'type':"POST",
+        'data' :{ formulario : formulario }
       },
        'responsive'  : false,
        'autoWidth'   : true,
@@ -109,5 +118,21 @@ function buscar() {
           {data:"created_at"},
         ]
     });
+});
 
-}
+//GET ARRAY FORM
+$.fn.serializeObject = function(){
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};

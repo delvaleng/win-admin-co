@@ -11,7 +11,7 @@
        <div class="box box-primary">
            <div class="box-body">
                <div class="row">
-                   {!! Form::model($tpMarcacion, ['route' => ['tpMarcacions.update', $tpMarcacion->id], 'method' => 'patch']) !!}
+                   {!! Form::model($tpMarcacion, ['route' => ['marcaciones-conf-tipo.update', $tpMarcacion->id], 'method' => 'patch']) !!}
 
                         @include('tp_marcacions.fields')
 

@@ -13,7 +13,7 @@
 
             <div class="box-body">
                 <div class="row">
-                    {!! Form::open(['route' => 'tpMarcacions.store']) !!}
+                    {!! Form::open(['route' => 'marcaciones-conf-tipo.store']) !!}
 
                         @include('tp_marcacions.fields')
 

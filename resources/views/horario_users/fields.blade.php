@@ -1,7 +1,7 @@
 <!-- Id Empleado Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('id_empleado', 'Empleado:') !!}
-  {!! Form::select('id_empleado', $empleado, null,['id'=>'id_empleado', 'class'=>'form-control select2', 'style'=>'width: 100%'] ) !!}
+  {!! Form::label('id_user', 'Empleado:') !!}
+  {!! Form::select('id_user', $empleado, null,['id'=>'id_user', 'class'=>'form-control select2', 'style'=>'width: 100%'] ) !!}
 </div>
 
 <!-- Dia Field -->
@@ -25,5 +25,5 @@
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
   {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-  <a href="{!! route('horarioUsers.index') !!}" class="btn btn-default">Cancelar</a>
+  <a href="{!! route('marcaciones-conf-horarios.index') !!}" class="btn btn-default">Cancelar</a>
 </div>

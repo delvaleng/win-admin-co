@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\General\Rol_Main;
+use App\Models\Admin\Rol_Main;
 use App\Repositories\BaseRepository;
 
 /**

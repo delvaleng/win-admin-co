@@ -39,23 +39,23 @@ $(document).ready(function() {
                 '<a href="/rol-menus/'+data+'/edit" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>'+
                 '</div>';
               }},
-              {data:"id_role",
+              {data:"get_rol",
               "render": function (data, type, row) {
-               return (data) ? row.get_rol.description : '-';
+               return (data) ? data.role_name : '-';
               }},
-              {data:"id_main",
+              {data:"get_menu",
               "render": function (data, type, row) {
-               return (data) ? row.get_menu.description : '-';
+               return (data) ? data.main_name : '-';
               }},
               {data:"note",
               "render": function (data, type, row) {
                return (data) ? data : '-';
               }},
-              {data:"modified_by",
+              {data:"user_id",
               "render": function (data, type, row) {
                return (data) ? data : '-';
               }},
-              {data:"status_user",
+              {data:"status",
              "render": function (data, type, row) {
                 return (data == true)? '<a onclick="estatusUpload('+row.id+')"><i class="glyphicon glyphicon-ok-circle"></i><a>' :
                 '<a onclick="estatusUpload('+row.id+')"><i class="glyphicon glyphicon-ban-circle"></i><a>';

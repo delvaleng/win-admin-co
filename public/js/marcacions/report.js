@@ -5,51 +5,49 @@ $(document).ready(function() {
 
 
   //RANGO DE FECHA
-  // $('#daterange' ).daterangepicker({
-  //   "maxSpan": {
-  //       "days": 6
-  //   },
-  //   "alwaysShowCalendars": true,
-  //   "opens": "center",
-  //   "autoUpdateInput" : false,
-  //   "minDate": new Date('2019-11-19'),
-  //   "ranges"   : {
-  //     'Hoy'         : [moment(), moment()],
-  //     'Ayer'        : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-  //   },
-  //   "locale"    : {
-  //     "format": "YYYY-MM-DD",
-  //     "separator": " - ",
-  //     "applyLabel": "Guardar",
-  //     "cancelLabel": "Cancelar",
-  //     "fromLabel": "Desde",
-  //     "toLabel": "Hasta",
-  //     "customRangeLabel": "Personalizar",
-  //     "daysOfWeek": [
-  //       "Do",         "Lu",         "Ma",         "Mi",
-  //       "Ju",         "Vi",         "Sa"
-  //     ],
-  //     "monthNames": [
-  //       "Enero",      "Febrero",    "Marzo",      "Abril",
-  //       "Mayo",       "Junio",      "Julio",      "Agosto",
-  //       "Setiembre",  "Octubre",    "Noviembre",  "Diciembre"
-  //     ],
-  //     "firstDay": 1,
-  //     "startDate": moment().subtract(29, 'days'),
-  //     "endDate"  : moment()
-  //  },
-  // }).on('apply.daterangepicker', function (e, picker) {
-  //   $("#startDate").val(picker.startDate.format('DD-MM-YYYY'));
-  //   $("#endDate").val(picker.endDate.format('DD-MM-YYYY'));
-  // });
-  // $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
-  //   $(this).val(picker.startDate.format('MM-DD-YYYY') + ' - ' + picker.endDate.format('MM-DD-YYYY'));
-  // });
-  // $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
-  //   $(this).val('');
-  //   $("#startDate").val('');
-  //   $("#endDate").val('');
-  // });
+  $('#daterange' ).daterangepicker({
+    "autoUpdateInput" : false,
+    "ranges"   : {
+      'Hoy'         : [moment(), moment()],
+      'Ayer'        : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+      'Hace 7 Dias' : [moment().subtract(6, 'days'), moment()],
+      'Hace 30 Dias': [moment().subtract(29, 'days'), moment()],
+      'Este Mes'    : [moment().startOf('month'), moment().endOf('month')],
+      'Mes Pasado'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    },
+    "locale"    : {
+      "format": "YYYY-MM-DD",
+      "separator": " - ",
+      "applyLabel": "Guardar",
+      "cancelLabel": "Cancelar",
+      "fromLabel": "Desde",
+      "toLabel": "Hasta",
+      "customRangeLabel": "Personalizar",
+      "daysOfWeek": [
+        "Do",         "Lu",         "Ma",         "Mi",
+        "Ju",         "Vi",         "Sa"
+      ],
+      "monthNames": [
+        "Enero",      "Febrero",    "Marzo",      "Abril",
+        "Mayo",       "Junio",      "Julio",      "Agosto",
+        "Setiembre",  "Octubre",    "Noviembre",  "Diciembre"
+      ],
+      "firstDay": 1,
+      "startDate": moment().subtract(29, 'days'),
+      "endDate"  : moment()
+   },
+  }).on('apply.daterangepicker', function (e, picker) {
+    $("#startDate").val(picker.startDate.format('DD-MM-YYYY'));
+    $("#endDate").val(picker.endDate.format('DD-MM-YYYY'));
+  });
+  $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('MM-DD-YYYY') + ' - ' + picker.endDate.format('MM-DD-YYYY'));
+  });
+  $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
+    $("#startDate").val('');
+    $("#endDate").val('');
+  });
   //RANGO DE FECHA
 
 
@@ -91,8 +89,10 @@ $(document).ready(function() {
 //BUSQUEDA DE DATOS
 $("#search").unbind('click');
 $("#search"  ).click(function() {
-  if(  $('#mes').val() == '' &&  $('#year').val() == ''){
-    alert("¡Debes indicar mes y año!");
+
+
+  if(  $('#startDate').val() == '' &&  $('#endDate').val() == ''){
+    alert("¡Indica una fecha de búsqueda!");
     return false;
   }
   var formulario = $("#formMarcaciones").serializeObject();
@@ -185,8 +185,11 @@ $("#search"  ).click(function() {
 
 
 $("#clean" ).click(function() {
-  $('#mes').val('').trigger('change');
-  $('#year').val('').trigger('change');
+  $("#startDate").val('');
+  $("#endDate").val('');
+  $('input[name="daterange"]').val('');
+  $('#id_empleado').val('').trigger('change');
+
 });
 
 //GET ARRAY FORM

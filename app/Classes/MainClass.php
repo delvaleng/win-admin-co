@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Classes;
-use App\Models\General\Main;
+use App\Models\Admin\Main;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use View;
@@ -27,10 +27,10 @@ class MainClass{
 
       $valor=  Main::where('users.id', '=', auth()->user()->id)
       ->where('main.path', 'like', '/'.$url.'%')
-      ->join('rol_main', 'main.id',               '=',   'rol_main.id_main')
-      ->join('roles',    'roles.id',              '=',   'rol_main.id_role')
-      ->join('rol_user', 'rol_user.id_role',      '=',   'roles.id')
-      ->join('users',    'users.id',              '=',   'rol_user.id_user')
+      ->join('rol_main', 'main.id',               '=',   'rol_main.main_id')
+      ->join('roles',    'roles.id',              '=',   'rol_main.role_id')
+      ->join('rol_users','rol_users.role_id',     '=',   'roles.id')
+      ->join('users',    'users.id',              '=',   'rol_users.user_id')
       ->first();
 
       if($valor != null){
@@ -46,7 +46,7 @@ class MainClass{
     $strMenu   = '';
     $Menu = $this->getMainByUser($id_user, $id_seccion);
     foreach ($Menu as $main) {
-      $name       = $main->description;
+      $name       = $main->main_name;
       $url        = $main->path;
       $icon       = $main->icon;
 
@@ -72,14 +72,14 @@ class MainClass{
   private function getMainByUser($id_user, $id_seccion){
     return Main::where('users.id', '=', $id_user)
     ->where('section', '=', $id_seccion)
-    ->where('main.status_user', '=', 'TRUE')
-    ->join('rol_main', 'main.id',               '=',   'rol_main.id_main')
-    ->join('roles',    'roles.id',              '=',   'rol_main.id_role')
-    ->join('rol_user', 'rol_user.id_role',      '=',   'roles.id')
-    ->join('users',    'users.id',              '=',   'rol_user.id_user')
-    ->select('main.id', 'main.section', 'main.path', 'main.description', 'main.icon')
+    ->where('main.status', '=', 'TRUE')
+    ->join('rol_main', 'main.id',               '=',   'rol_main.main_id')
+    ->join('roles',    'roles.id',              '=',   'rol_main.role_id')
+    ->join('rol_users','rol_users.role_id',     '=',   'roles.id')
+    ->join('users',    'users.id',              '=',   'rol_users.user_id')
+    ->select('main.id', 'main.section', 'main.path', 'main.main_name', 'main.icon')
     ->orderby('main.orden', 'asc')
-    ->orderby('main.description', 'asc')
+    ->orderby('main.main_name', 'asc')
     ->get();
 
   }

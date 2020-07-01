@@ -8,7 +8,7 @@
 <section class="content-header">
   <h1 class="pull-left">Tipos de Marcaciones</h1>
   <h1 class="pull-right">
-    <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('tpMarcacions.create') !!}">+</a>
+    <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('marcaciones-conf-tipo.create') !!}">+</a>
   </h1>
 </section>
 

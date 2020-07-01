@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\General\City;
+use App\Models\Admin\City;
 use App\Repositories\BaseRepository;
 
 /**
@@ -17,9 +17,9 @@ class CityRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
-        'city',
-        'id_departament',
-        'status'
+      'city_name',
+      'state_id',
+      'status'
     ];
 
     /**

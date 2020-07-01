@@ -1,29 +1,16 @@
 @extends('layouts.app')
-@section('title', 'Ciudad')
+@section('title', 'Ciudades')
 
 @section('css')
   <link rel="stylesheet" href="{{ asset('plugins/DataTable/datatables.min.css') }}"/>
-
-  <style>
-    th, td { white-space: nowrap; }
-    div.dataTables_wrapper {
-      margin: 0 auto;
-    }
-
-    div.container {
-      width: 80%;
-    }
-    th { font-size: 12px; }
-    td { font-size: 11px; }
-    label { font-size: 12px; }
-  </style>
+  <link rel="stylesheet" href="{{ asset('css/table-small.css') }}"/>
 @endsection
 
 @section('content')
 <section class="content-header">
   <h1 class="pull-left">Ciudades</h1>
   <h1 class="pull-right">
-    <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('ciudad.create') !!}">+</a>
+    <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('ciudades.create') !!}">+</a>
   </h1>
 </section>
 
@@ -93,19 +80,19 @@
        {data:"id",
        "render": function (data, type, row) {
          return '<div class="btn-group">'+
-         '<a href="/ciudad/'+data+'"      class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i></a>'+
-         '<a href="/ciudad/'+data+'/edit" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>'+
+         '<a href="/ciudades/'+data+'"      class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i></a>'+
+         '<a href="/ciudades/'+data+'/edit" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>'+
          '</div>';
        }},
-         {data:"get_departament_country",
+         {data:"get_state_country",
          "render": function (data, type, row) {
-          return (data) ? data[0].country : '-';
+          return (data) ? data[0].country_name : '-';
          }},
-         {data:"get_departament",
+         {data:"get_state",
          "render": function (data, type, row) {
-          return (data) ? data.departament : '-';
+          return (data) ? data.state_name : '-';
          }},
-         {data:"city",
+         {data:"city_name",
          "render": function (data, type, row) {
           return (data) ? data : '-';
          }},

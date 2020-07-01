@@ -72,7 +72,7 @@ $("#search"  ).click(function() {
                 '<a href="/menus/'+data+'/edit" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>'+
                 '</div>';
               }},
-              {data:"description",
+              {data:"main_name",
               "render": function (data, type, row) {
                return (data) ? data : '-';
               }},

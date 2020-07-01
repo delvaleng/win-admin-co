@@ -1,7 +1,7 @@
 <!-- Menu Field -->
 <div class="form-group col-sm-6"><div class="input-group col-xs-12">
-  {!! Form::label('description', 'Menú:') !!}
-  {!! Form::text('description', null, ['class' => 'form-control']) !!}
+  {!! Form::label('main_name', 'Menú:') !!}
+  {!! Form::text('main_name', null, ['class' => 'form-control']) !!}
 </div><div><span class="help-block" id="error"></span></div></div>
 
 <!-- Section Field -->

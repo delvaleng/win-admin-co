@@ -3,9 +3,9 @@
     <thead>
       <tr>
         <th>N°</th>
-        <th>(+)Permiso</th>
+        <th>Permiso</th>
         <th>Empleado</th>
-        <th>Tipo de Marcacion</th>
+        <th>Marcacion</th>
         <th>Dia</th>
         <th>Hora Inicio</th>
         <th>Hora Fin</th>
@@ -21,9 +21,9 @@
     <tfoot>
       <tr>
         <th>N°</th>
-        <th>(+)Permiso</th>
+        <th>Permiso</th>
         <th>Empleado</th>
-        <th>Tipo de Marcacion</th>
+        <th>Marcacion</th>
         <th>Dia</th>
         <th>Hora Inicio</th>
         <th>Hora Fin</th>

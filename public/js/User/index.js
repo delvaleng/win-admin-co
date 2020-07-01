@@ -1,11 +1,13 @@
+$.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+var table;
+
 $(document).ready(function(){
   $('.select2').select2();
-  var table;
 
   table = $('#users').DataTable({
       'ajax': {
-        'url': "/usersAll",
-        'type':"GET",
+        'url': "/getUsers",
+        'type':"POST",
       },
        'responsive'  : true,
        'autoWidth': false,
@@ -32,14 +34,15 @@ $(document).ready(function(){
           }
         },
        'columns':[
-          {data: "action"},
+          {data:"action"},
           {data:"username"},
+          {data:"ndocumento"},
           {data:"name"},
           {data:"phone"},
           {data:"email"},
           {data:"id_country"},
           {data:"usermodifyby"},
-          {data:"status_user"}]
+          {data:"status"}]
     });
   $("#btn_rol").unbind('click');
 
@@ -167,14 +170,15 @@ $.fn.showUser          = function(id){
       dataType: "json",
       type:  "POST",
       success:  function (response) {
-        $('#fullName').append(response.user.lastname+' '+response.user.name);
-        $('#dni').append(response.user.dni);
-        $('#birthdate').append(response.user.birthdate);
-        $('#phone').append(response.user.phone);
-        $('#id_country').append(response.user.get_country.country);
-        $('#address').append(response.user.address);
-        $('#username').append(response.user.username);
-        $('#gender').append(response.user.gender);
+        console.log(response);
+        $('#fullName'  ).append(response.user.last_name+' '+response.user.first_name);
+        $('#dni'       ).append((response.user.dni)? response.user.dni : '-');
+        $('#birthdate' ).append(response.user.birthdate);
+        $('#phone'     ).append(response.user.phone);
+        $('#id_country').append(response.user.get_country.country_name);
+        $('#address'   ).append(response.user.address);
+        $('#username'  ).append(response.user.username);
+        $('#gender'    ).append(response.user.gender);
 
         var rol = '<table id="roles"  name="roles"   width="100%" align="left">'+
                     '<tr>'+
@@ -189,7 +193,7 @@ $.fn.showUser          = function(id){
           var num = index +1;
           rol += '<tr>'+
                       '<td align="center">'+num+'</th>'+
-                      '<td align="left">'+value.description+'</td>'+
+                      '<td align="left">'+value.role_name+'</td>'+
                     '</tr>';
         });
         rol += '</table>'
@@ -232,7 +236,7 @@ $.fn.showRoles         = function(id){
                             '<td align="left" with="100px">'+item.ramanombre+'</td>'+
                             '<td align="left" with="100px">'+item.rol+'</td>'+
                           '</tr>';
-                if (id_rol.indexOf(item.id_rol)== -1) {id_rol.push(item.id_rol); }
+                if (id_rol.indexOf(item.role_id)== -1) {id_rol.push(item.role_id); }
             });
             $('#id_rolU').val(id_rol).trigger("change");
             $('#rol_details').append(htmlRol);

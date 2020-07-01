@@ -11,7 +11,7 @@
             <div class="box-body">
                 <div class="row" style="padding-left: 20px">
                     @include('tp_marcacions.show_fields')
-                    <a href="{!! route('tpMarcacions.index') !!}" class="btn btn-default">Volver</a>
+                    <a href="{!! route('marcaciones-conf-tipo.index') !!}" class="btn btn-default">Volver</a>
                 </div>
             </div>
         </div>

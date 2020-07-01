@@ -13,12 +13,11 @@
   </h1>
 </section>
  <div class="content">
-   @include('adminlte-templates::common.errors')
   <div class="box box-primary">
     <div class="box-body">
       <div class="row">
         {!! Form::model($rolUsers, ['route' => ['rol-usuarios.update', $rolUsers->id], 'method' => 'patch' , 'id'=>'formEditRolUsers']) !!}
-          @include('panel.rol_users.fields')
+          @include('rol_users.fields')
         {!! Form::close() !!}
       </div>
     </div>

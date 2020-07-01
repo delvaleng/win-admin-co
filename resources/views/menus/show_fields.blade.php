@@ -1,7 +1,7 @@
 <!-- Menu Field -->
 <div class="form-group col-sm-4">
-  {!! Form::label('description', 'Menú:') !!}
-  <p>{!! $menu->description !!}</p>
+  {!! Form::label('main_name', 'Menú:') !!}
+  <p>{!! $menu->main_name !!}</p>
 </div>
 
 <!-- Section Field -->

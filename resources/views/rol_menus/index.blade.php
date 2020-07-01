@@ -1,21 +1,11 @@
 @extends('layouts.app')
-@section('title', 'Rol\Menú')
+@section('title', 'Rol Menú')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/DataTable/Responsive-2.2.2/css/responsive.dataTables.min.css')}}">
 <link rel="stylesheet" href="{{ asset('plugins/DataTable/DataTables-1.10.18/css/jquery.dataTables.min.css')}}">
-<style>
-  th, td { white-space: nowrap; }
-  div.dataTables_wrapper {
-    margin: 0 auto;
-  }
-  div.container {
-    width: 80%;
-  }
-  th { font-size: 12px; }
-  td { font-size: 11px; }
-  label { font-size: 12px; }
-</style>
+<link rel="stylesheet" href="{{ asset('plugins/DataTable/datatables.min.css') }}"/>
+<link rel="stylesheet" href="{{ asset('css/table-small.css') }}"/>
 @endsection
 
 @section('content')

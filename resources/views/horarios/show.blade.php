@@ -13,7 +13,7 @@
     <div class="box-body">
       <div class="row" style="padding-left: 20px">
         @include('horarios.show_fields')
-        <a href="{!! route('horarioUsers.show', [$horario->id_horario_user]) !!}" class="btn btn-default">Volver</a>
+        <a href="{!! route('marcaciones-conf-horarios.show', [$horario->id_horario_user]) !!}" class="btn btn-default">Volver</a>
       </div>
     </div>
   </div>

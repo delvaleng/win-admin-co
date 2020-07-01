@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title', 'Ciudad')
+@section('title', 'Ciudades')
 
 @section('content')
 <section class="content-header">
   <h1>
-    Ciudad
+    Ciudades
   </h1>
 </section>
 
@@ -12,7 +12,7 @@
   <div class="box box-primary">
     <div class="box-body">
       <div class="row">
-        {!! Form::model($city, ['route' => ['ciudad.update', $city->id], 'method' => 'patch']) !!}
+        {!! Form::model($city, ['route' => ['ciudades.update', $city->id], 'method' => 'patch']) !!}
           @include('cities.fields')
         {!! Form::close() !!}
       </div>

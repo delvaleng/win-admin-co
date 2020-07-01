@@ -7,41 +7,46 @@
 <!-- Country Field -->
 <div class="form-group col-sm-6">
   {!! Form::label('country', 'Pa&iacute;s:') !!}
-  <p>{!! $country->country !!}</p>
+  <p>{!! $country->country_name !!}</p>
 </div>
 
 <div class="form-group col-sm-6">
-  {!! Form::label('code', 'C&oacute;digo:') !!}
+  {!! Form::label('area_code', 'C&oacute;digo Pais:') !!}
+  <p>{!! $country->area_code !!}</p>
+</div>
+
+<div class="form-group col-sm-6">
+  {!! Form::label('code', 'C&oacute;digo &Aacute;rea:') !!}
   <p>{!! $country->code !!}</p>
 </div>
 
 <div class="form-group col-sm-6">
-  {!! Form::label('moneda_local', 'Moneda/Local:') !!}
-  <p>{!! $country->moneda_local !!}</p>
+  {!! Form::label('national_currency', 'Moneda/Local:') !!}
+  <p>{!! $country->national_currency !!}</p>
 </div>
 
 <div class="form-group col-sm-6">
-  {!! Form::label('moneda_admitida', 'Moneda/Admitida:') !!}
-  <p>{!! $country->moneda_admitida !!}</p>
+  {!! Form::label('foreign_currency', 'Moneda/Admitida:') !!}
+  <p>{!! $country->foreign_currency !!}</p>
 </div>
 
 <div class="form-group col-sm-6">
-  {!! Form::label('simbolo_local', 'S&iacute;mbolo/Local:') !!}
-  <p>{!! $country->simbolo_local !!}</p>
+  {!! Form::label('national_symbol', 'S&iacute;mbolo/Local:') !!}
+  <p>{!! $country->national_symbol !!}</p>
 </div>
 
 <div class="form-group col-sm-6">
-  {!! Form::label('simbolo_admitida', 'S&iacute;mbolo/Admitida:') !!}
-  <p>{!! $country->simbolo_admitida !!}</p>
+  {!! Form::label('foreign_symbol', 'S&iacute;mbolo/Admitida:') !!}
+  <p>{!! $country->foreign_symbol !!}</p>
 </div>
 
 <div class="form-group col-sm-6">
-  {!! Form::label('conversion_monto', 'Conversi&oacute;n/Monto:') !!}
-  <p>{!! $country->conversion_monto !!}</p>
+  {!! Form::label('convert_mount', 'Conversi&oacute;n/Monto:') !!}
+  <p>{!! $country->convert_mount !!}</p>
 </div>
 
 <!-- Status Field -->
-<div class="form-group col-sm-6">
+<div class="form-group col-sm-12">
   {!! Form::label('status', 'Estatus:') !!}
   <p>{!! ($country->status == 1)? 'ACTIVO' : 'DESACTIVADO' !!}</p>
 </div>

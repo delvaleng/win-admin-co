@@ -2,30 +2,13 @@
 @section('title', 'Reportes')
 
 @section('css')
-<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="{{ asset('plugins/DataTable/datatables.min.css') }}"/>
+<link rel="stylesheet" href="{{ asset('bower_components/select2/dist/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bower_components/bootstrap-daterangepicker/daterangepicker.css') }}">
+<link rel="stylesheet" href="{{ asset('alertify/css/alertify.min.css') }}">
+<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="{{ asset('css/table-small.css') }}"/>
 
-<style>
-  .btn-circle {
-    width: 25px;
-    height: 25px;
-    padding: 6px 0px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 12px;
-  }
-  .btn2.btn-default  {background:transparent,  border-color: #252d3d !important;}
-  .btn2.btn2-primary {background-color: #08426a !important;  border-color: #252d3d !important; color : #fff !important}
-  th, td { white-space: nowrap; }
-  div.dataTables_wrapper {
-    margin: 0 auto;
-  }
-  div.container {
-    width: 80%;
-  }
-
-</style>
 @endsection
 
 @section('content')
@@ -47,45 +30,18 @@
           <div class="row">
 
             <div class="col-sm-6">
-              <div class="form-group">
-                <label for="mes" class="control-label">Mes</label>
-                <div class="input-group">
-                  <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                  <select id="mes" class="form-control select2" style="width: 100%" name="mes">
-                    <option selected="selected" value="">Seleccione...</option>
-                    <option value="01">Enero</option>
-                    <option value="02">Febrero</option>
-                    <option value="03">Marzo</option>
-                    <option value="04">Abril</option>
-                    <option value="05">Mayo</option>
-                    <option value="06">Junio</option>
-                    <option value="07">Julio</option>
-                    <option value="08">Agosto</option>
-                    <option value="09">Septiembre</option>
-                    <option value="10">Octubre</option>
-                    <option value="11">Noviembre</option>
-                    <option value="12">Diciembre</option>
-                  </select>
+                <div class="form-group">
+                  <label for="id_invited_by" class="control-label">Fecha</label>
+                  <div class="input-group">
+                      <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                      {!! Form::text('daterange',   null, ['id'=>'daterange', 'class' => 'form-control']) !!}
+                      {!! Form::hidden('startDate', null, ['id'=>'startDate', 'class' => 'form-control']) !!}
+                      {!! Form::hidden('endDate',   null, ['id'=>'endDate', 'class' => 'form-control']) !!}
+                  </div>
+                  <div><span class="help-block" id="error"></span></div>
                 </div>
-                <div><span class="help-block" id="error"></span></div>
               </div>
-            </div>
 
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="year" class="control-label">Año</label>
-                <div class="input-group">
-                  <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                  <select id="year" class="form-control select2" style="width: 100%" name="year">
-                    <option selected="selected" value="">Seleccione...</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                  </select>
-                </div>
-                <div><span class="help-block" id="error"></span></div>
-              </div>
-            </div>
 
             <div class="col-sm-6">
               <div class="form-group">
@@ -136,16 +92,24 @@
 </div>
 @endsection
 
-@section('scripts')
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+@section('js')
+<!-- DataTable -->
+<script src="{{ asset('plugins/DataTable/DataTables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/DataTable/Responsive-2.2.2/js/dataTables.responsive.js') }}"></script>
+<script src="{{ asset('plugins/DataTable/Buttons-1.5.2/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/DataTable/Buttons-1.5.2/js/buttons.flash.min.js') }}"></script>
+<script src="{{ asset('plugins/DataTable/Buttons-1.5.2/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/DataTable/Buttons-1.5.2/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/DataTable/AJAX/jszip.min.js') }}"></script>
+<script src="{{ asset('plugins/DataTable/AJAX/pdfmake.min.js') }}"></script>
 
-<!-- Datatables -->
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
-
+<!-- select2 -->
+<script src="{{ asset('bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+<!-- daterangepicker -->
+<script src="{{ asset('bower_components/moment/min/moment.min.js') }}"></script>
+<script src="{{ asset('bower_components/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+<!-- alertify -->
+<script src="{{ asset('alertify/js/alertify.min.js') }}"></script>
+<!-- enlace -->
 <script src="{{ asset('js/marcacions/report.js')}} "></script>
 @endsection

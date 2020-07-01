@@ -14,21 +14,18 @@ class CreateVMenuRolesView extends Migration
      */
     public function up()
     {
-      DB::statement(" CREATE OR REPLACE VIEW v_menu_roles AS
-          SELECT DISTINCT
-            mh.id,
-            mh.seccion,
-            mh.url,
-            mh.ramaid,
-            mh.ramanombre,
-            rm.role_id     AS role_id,
-            r.role_name    AS role_name,
-            rm.id          AS rol_main_id
-
-          FROM win.v_menu_hojas mh
-
-          LEFT JOIN win.rol_main rm  ON mh.id      = rm.main_id
-          LEFT JOIN win.roles    r   ON r.id       = rm.role_id;");
+      DB::statement("CREATE OR REPLACE VIEW v_menu_roles AS 
+       SELECT DISTINCT mh.id,
+          mh.seccion,
+          mh.url,
+          mh.ramaid,
+          mh.ramanombre,
+          rm.role_id,
+          r.role_name,
+          rm.id AS rol_main_id
+         FROM winadmin.v_menu_hojas mh
+           LEFT JOIN winadmin.rol_main rm ON mh.id = rm.main_id
+           LEFT JOIN winadmin.roles r ON r.id = rm.role_id;");
     }
 
     /**

@@ -2,25 +2,38 @@
 
 namespace App\Http\Controllers\Marcacion;
 
-use App\Http\Requests\CreateTpMarcacionRequest;
-use App\Http\Requests\UpdateTpMarcacionRequest;
-use App\Repositories\TpMarcacionRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
-use App\Models\General\Main;
+
+use App\Models\Admin\TpMarcacion;
+
+use App\Models\Admin\RolUser;
+use App\Models\Admin\RolMain;
+use App\Models\Admin\Main;
 use App\Classes\MainClass;
 use Flash;
 use Response;
 
 class TpMarcacionController extends AppBaseController
 {
-    /** @var  TpMarcacionRepository */
-    private $tpMarcacionRepository;
+  private $menuid = 14;
 
-    public function __construct(TpMarcacionRepository $tpMarcacionRepo)
-    {
-        $this->tpMarcacionRepository = $tpMarcacionRepo;
+  public function validPermisoMenu() {
+    $roles = RolUser::where('user_id', auth()->user()->id)->get();
+    foreach ($roles as $key) {
+      if($key->role_id == 1){
+        return true;
+      }
+      else{
+        $menu = RolMain::where('role_id', $key->role_id)
+        ->where('main_id', $this->menuid)->first();
+        if($menu){
+          return true;
+        }
+      }
     }
+    return false;
+  }
 
     /**
      * Display a listing of the TpMarcacion.
@@ -34,7 +47,13 @@ class TpMarcacionController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $tpMarcacions = $this->tpMarcacionRepository->all();
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
+
+        $tpMarcacions = TpMarcacion::all();
 
         return view('tp_marcacions.index')
         ->with('tpMarcacions', $tpMarcacions)
@@ -50,6 +69,11 @@ class TpMarcacionController extends AppBaseController
     {
       $main = new MainClass();
       $main = $main->getMain();
+
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
 
       return view('tp_marcacions.create')
       ->with('main', $main);
@@ -67,7 +91,7 @@ class TpMarcacionController extends AppBaseController
         $input = $request->all();
         $input{'descripcion'} = mb_strtoupper($input{'descripcion'});
 
-        $tpMarcacion = $this->tpMarcacionRepository->create($input);
+        $tpMarcacion = TpMarcacion::create($input);
 
         Flash::success('Marcacion guardada exitosamente.');
 
@@ -86,7 +110,12 @@ class TpMarcacionController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $tpMarcacion = $this->tpMarcacionRepository->find($id);
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
+        $tpMarcacion = TpMarcacion::find($id);
 
         if (empty($tpMarcacion)) {
             Flash::error('Marcacion no encontrado');
@@ -110,8 +139,9 @@ class TpMarcacionController extends AppBaseController
     {
       $main = new MainClass();
       $main = $main->getMain();
+      return view('errors.403', compact('main'));
 
-        $tpMarcacion = $this->tpMarcacionRepository->find($id);
+        $tpMarcacion = TpMarcacion::find($id);
 
         if (empty($tpMarcacion)) {
             Flash::error('Marcacion no encontrado');
@@ -134,7 +164,7 @@ class TpMarcacionController extends AppBaseController
      */
     public function update($id, UpdateTpMarcacionRequest $request)
     {
-        $tpMarcacion = $this->tpMarcacionRepository->find($id);
+        $tpMarcacion = TpMarcacion::find($id);
 
         if (empty($tpMarcacion)) {
             Flash::error('Marcacion no encontrado');
@@ -144,7 +174,7 @@ class TpMarcacionController extends AppBaseController
         $input = $request->all();
         $input{'descripcion'} = mb_strtoupper($input{'descripcion'});
 
-        $tpMarcacion = $this->tpMarcacionRepository->update($input, $id);
+        $tpMarcacion = TpMarcacion::update($input, $id);
 
         Flash::success('Marcacion actualizada exitosamente.');
 
@@ -162,7 +192,7 @@ class TpMarcacionController extends AppBaseController
      */
     public function destroy($id)
     {
-        $tpMarcacion = $this->tpMarcacionRepository->find($id);
+        $tpMarcacion = TpMarcacion::find($id);
 
         if (empty($tpMarcacion)) {
             Flash::error('Marcacion no encontrado');
@@ -170,7 +200,7 @@ class TpMarcacionController extends AppBaseController
             return redirect(route('tpMarcacions.index'));
         }
 
-        $this->tpMarcacionRepository->delete($id);
+        TpMarcacion::delete($id);
 
         Flash::success('Marcacion eliminada exitosamente.');
 

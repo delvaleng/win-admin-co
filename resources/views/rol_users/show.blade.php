@@ -15,7 +15,7 @@
     <div class="box box-primary">
       <div class="box-body">
         <div class="row" style="padding-left: 20px">
-          @include('panel.rol_users.show_fields')
+          @include('rol_users.show_fields')
           <a href="{!! route('rol-usuarios.index') !!}" class="btn btn-registro btn-default">Atrás</a>
         </div>
       </div>

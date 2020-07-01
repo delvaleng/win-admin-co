@@ -13,7 +13,7 @@
     <div class="box-body">
       <div class="row" style="padding-left: 20px">
         @include('autorizacion_empleados.show_fields')
-        <a href="{!! route('autorizacionEmpleados.index') !!}" class="btn btn-default">Regresar</a>
+        <a href="{!! route('marcaciones-autorizaciones.index') !!}" class="btn btn-default">Volver</a>
       </div>
     </div>
   </div>

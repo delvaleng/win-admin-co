@@ -14,13 +14,13 @@ class CreateVMenuHojasView extends Migration
      */
     public function up()
     {
-      DB::statement(" CREATE OR REPLACE VIEW v_menu_hojas AS
+      DB::statement("CREATE OR REPLACE VIEW v_menu_hojas AS
        SELECT m.id,
-              m.section AS seccion,
-              m.path    AS url,
-              win.getramaid(m.id)     AS ramaid,
-              win.getramanombre(m.id) AS ramanombre
-        FROM win.main m
+          m.section AS seccion,
+          m.path AS url,
+          winadmin.getramaid(m.id) AS ramaid,
+          winadmin.getramanombre(m.id) AS ramanombre
+         FROM winadmin.main m
         WHERE m.status = true AND m.path IS NOT NULL;");
     }
 

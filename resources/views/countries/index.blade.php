@@ -3,19 +3,7 @@
 
 @section('css')
   <link rel="stylesheet" href="{{ asset('plugins/DataTable/datatables.min.css') }}"/>
-  <style>
-    th, td { white-space: nowrap; }
-    div.dataTables_wrapper {
-      margin: 0 auto;
-    }
-
-    div.container {
-      width: 80%;
-    }
-    th { font-size: 12px; }
-    td { font-size: 11px; }
-    label { font-size: 12px; }
-  </style>
+  <link rel="stylesheet" href="{{ asset('css/table-small.css') }}"/>
 @endsection
 
 @section('content')
@@ -88,7 +76,11 @@
            '<a href="/pais/'+data+'/edit" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>'+
            '</div>';
          }},
-         {data:"country",
+         {data:"country_name",
+         "render": function (data, type, row) {
+          return (data) ? data : '-';
+         }},
+         {data:"area_code",
          "render": function (data, type, row) {
           return (data) ? data : '-';
          }},
@@ -96,23 +88,23 @@
          "render": function (data, type, row) {
           return (data) ? data : '-';
          }},
-         {data:"moneda_local",
+         {data:"national_currency",
          "render": function (data, type, row) {
           return (data) ? data : '-';
          }},
-         {data:"moneda_admitida",
+         {data:"foreign_currency",
          "render": function (data, type, row) {
           return (data) ? data : '-';
          }},
-         {data:"simbolo_local",
+         {data:"national_symbol",
          "render": function (data, type, row) {
           return (data) ? data : '-';
          }},
-         {data:"simbolo_admitida",
+         {data:"foreign_symbol",
          "render": function (data, type, row) {
           return (data) ? data : '-';
          }},
-         {data:"conversion_monto",
+         {data:"convert_mount",
          "render": function (data, type, row) {
           return (data) ? data : '-';
          }},

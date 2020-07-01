@@ -9,11 +9,10 @@
 </section>
 
 <div class="content">
-  @include('adminlte-templates::common.errors')
   <div class="box box-primary">
     <div class="box-body">
       <div class="row">
-        {!! Form::model($autorizacionEmpleado, ['route' => ['autorizacionEmpleados.update', $autorizacionEmpleado->id], 'method' => 'patch']) !!}
+        {!! Form::model($autorizacionEmpleado, ['route' => ['marcaciones-autorizaciones.update', $autorizacionEmpleado->id], 'method' => 'patch']) !!}
           @include('autorizacion_empleados.fields')
         {!! Form::close() !!}
       </div>

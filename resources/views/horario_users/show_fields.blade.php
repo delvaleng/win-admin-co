@@ -1,7 +1,7 @@
 <!-- Id Empleado Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('id_empleado', 'Empleado:') !!}
-  <p>{!! $horarioUser->empleado->nombre !!} {!! $horarioUser->empleado->apellido  !!}</p>
+  {!! Form::label('id_user', 'Empleado:') !!}
+  <p>{!! $horarioUser->empleado->first_name !!} {!! $horarioUser->empleado->last_name  !!}</p>
 </div>
 
 <!-- Status Field -->

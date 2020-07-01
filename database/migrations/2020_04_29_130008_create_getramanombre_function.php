@@ -14,7 +14,7 @@ class CreateGetRamaNombreFunction extends Migration
      */
     public function up()
     {
-      DB::statement('CREATE FUNCTION getramanombre(p_idmenu integer)
+      DB::statement('CREATE OR REPLACE FUNCTION winadmin.getramanombre(p_idmenu integer)
         RETURNS character varying AS
         $BODY$
         DECLARE
@@ -24,17 +24,17 @@ class CreateGetRamaNombreFunction extends Migration
           v_ramanombre   VARCHAR;
         BEGIN
             /*Obtengo el idseccion del menu actual*/
-            SELECT M.section, M.main_name
+            SELECT M.section, m.main_name
             INTO v_idseccion, v_ramanombre
-            FROM win.MAIN M
-            WHERE M.main_id = p_idmenu;
+            FROM winadmin.main m
+            WHERE m.id = p_idmenu;
 
              /* condición recursiva para obtener la rama de los id */
               if v_idseccion = 0 then
                   p_ramanombre := v_ramanombre;
                   return p_ramanombre;
               else
-                  return win.getRamaNombre(v_idseccion) || " > " || v_ramanombre;
+                  return winadmin.getramanombre(v_idseccion) || \' > \' || v_ramanombre;
               end if;
 
         END;

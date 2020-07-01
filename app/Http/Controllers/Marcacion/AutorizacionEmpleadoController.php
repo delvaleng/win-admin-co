@@ -2,55 +2,79 @@
 
 namespace App\Http\Controllers\Marcacion;
 
-use App\Http\Requests\CreateAutorizacionEmpleadoRequest;
-use App\Http\Requests\UpdateAutorizacionEmpleadoRequest;
-use App\Repositories\AutorizacionEmpleadoRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
-use App\Models\AutorizacionEmpleado;
-use App\Models\General\Main;
+use App\Models\Marcaciones\AutorizacionEmpleado;
+
+use App\Models\Admin\RolUser;
+use App\Models\Admin\RolMain;
+use App\Models\Admin\Main;
 use App\Classes\MainClass;
+
 use Flash;
 use Response;
 
 class AutorizacionEmpleadoController extends AppBaseController
 {
-    /** @var  AutorizacionEmpleadoRepository */
-    private $autorizacionEmpleadoRepository;
+    private $menuid = 9;
 
-    public function __construct(AutorizacionEmpleadoRepository $autorizacionEmpleadoRepo)
+    public function validPermisoMenu()
     {
-        $this->autorizacionEmpleadoRepository = $autorizacionEmpleadoRepo->with('creadoBy', 'aprobadoBy', 'marcacion');
+      $roles = RolUser::where('user_id', auth()->user()->id)->get();
+      foreach ($roles as $key) {
+        if($key->role_id == 1){
+          return true;
+        }
+        else{
+          $menu = RolMain::where('role_id', $key->role_id)
+          ->where('main_id', $this->menuid)->first();
+          if($menu){
+            return true;
+          }
+        }
+      }
+      return false;
     }
 
-    /**
-     * Display a listing of the AutorizacionEmpleado.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function index(Request $request)
+    public function index()
     {
         $main = new MainClass();
         $main = $main->getMain();
 
-        $autorizacionEmpleados = $this->autorizacionEmpleadoRepository->all();
+        $valor = $this->validPermisoMenu();
+        if ($valor == false){
+          return view('errors.403', compact('main'));
+        }
+
 
         return view('autorizacion_empleados.index')
-        ->with('autorizacionEmpleados', $autorizacionEmpleados)
         ->with('main', $main);
     }
+
+    public function getAutorizaciones()
+    {
+
+      $data = (new AutorizacionEmpleado)->with('creadoBy', 'aprobadoBy','marcacion', 'getEmpleado', 'getTpMarcacion')->newQuery();
+      $data = $data->get();
+
+          return response()->json([
+            'data' => $data,
+          ]);
+
+    }
+
 
     /**
      * Show the form for creating a new AutorizacionEmpleado.
      *
      * @return Response
      */
+
     public function create()
     {
       $main = new MainClass();
       $main = $main->getMain();
+      return view('errors.403', compact('main'));
 
         return view('autorizacion_empleados.create')
         ->with('main', $main);
@@ -67,7 +91,7 @@ class AutorizacionEmpleadoController extends AppBaseController
     {
         $input = $request->all();
 
-        $autorizacionEmpleado = $this->autorizacionEmpleadoRepository->create($input);
+        $autorizacionEmpleado = AutorizacionEmpleado::create($input);
 
         Flash::success('Autorización Empleado guardada exitosamente.');
 
@@ -120,7 +144,7 @@ class AutorizacionEmpleadoController extends AppBaseController
       $main = new MainClass();
       $main = $main->getMain();
 
-        $autorizacionEmpleado = $this->autorizacionEmpleadoRepository->find($id);
+        $autorizacionEmpleado = AutorizacionEmpleado::find($id);
 
         if (empty($autorizacionEmpleado)) {
             Flash::error('Autorización Empleado no encontrada');
@@ -144,8 +168,9 @@ class AutorizacionEmpleadoController extends AppBaseController
     {
       $main = new MainClass();
       $main = $main->getMain();
+      return view('errors.403', compact('main'));
 
-        $autorizacionEmpleado = $this->autorizacionEmpleadoRepository->find($id);
+        $autorizacionEmpleado = AutorizacionEmpleado::find($id);
 
         if (empty($autorizacionEmpleado)) {
             Flash::error('Autorización Empleado no encontrada');
@@ -168,7 +193,7 @@ class AutorizacionEmpleadoController extends AppBaseController
      */
     public function update($id, UpdateAutorizacionEmpleadoRequest $request)
     {
-        $autorizacionEmpleado = $this->autorizacionEmpleadoRepository->find($id);
+        $autorizacionEmpleado = AutorizacionEmpleado::find($id);
 
         if (empty($autorizacionEmpleado)) {
             Flash::error('Autorización Empleado no encontrada');
@@ -176,7 +201,7 @@ class AutorizacionEmpleadoController extends AppBaseController
             return redirect(route('autorizacionEmpleados.index'));
         }
 
-        $autorizacionEmpleado = $this->autorizacionEmpleadoRepository->update($request->all(), $id);
+        $autorizacionEmpleado = AutorizacionEmpleado::update($request->all(), $id);
 
         Flash::success('Autorización Empleado actualizado exitosamente.');
 
@@ -194,7 +219,7 @@ class AutorizacionEmpleadoController extends AppBaseController
      */
     public function destroy($id)
     {
-        $autorizacionEmpleado = $this->autorizacionEmpleadoRepository->find($id);
+        $autorizacionEmpleado = AutorizacionEmpleado::find($id);
 
         if (empty($autorizacionEmpleado)) {
             Flash::error('Autorización Empleado no encontrada');
@@ -202,7 +227,7 @@ class AutorizacionEmpleadoController extends AppBaseController
             return redirect(route('autorizacionEmpleados.index'));
         }
 
-        $this->autorizacionEmpleadoRepository->delete($id);
+        AutorizacionEmpleado::delete($id);
 
         Flash::success('Autorización Empleado elimininada exitosamente.');
 

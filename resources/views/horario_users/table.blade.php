@@ -2,7 +2,7 @@
   <table class="stripe row-border order-column compact" id="horarioUsers-table">
     <thead>
       <tr>
-        <th>Acci&oacute;n</th>
+        <th width="25px">Acci&oacute;n</th>
         <th>Empleado</th>
       </tr>
     </thead>
@@ -10,15 +10,12 @@
       @foreach($horarioUsers as $horarioUser)
       <tr>
         <td>
-          {!! Form::open(['route' => ['horarioUsers.destroy', $horarioUser->id], 'method' => 'delete']) !!}
           <div class='btn-group'>
-            <a href="{!! route('horarioUsers.show', [$horarioUser->id]) !!}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
-            <a href="{!! route('horarioUsers.edit', [$horarioUser->id]) !!}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
-            {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('¿Estas seguro?')"]) !!}
+            <a href="{!! route('marcaciones-conf-horarios.show', [$horarioUser->id]) !!}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
+            <a href="{!! route('marcaciones-conf-horarios.edit', [$horarioUser->id]) !!}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
           </div>
-          {!! Form::close() !!}
         </td>
-        <td>{!! $horarioUser->empleado->nombre !!} {!! $horarioUser->empleado->apellido  !!}</td>
+        <td>{!! $horarioUser->empleado->first_name !!} {!! $horarioUser->empleado->last_name  !!}</td>
       </tr>
       @endforeach
     </tbody>

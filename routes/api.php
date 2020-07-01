@@ -11,14 +11,3 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-
-Route::post('/searchConductor',  'Apis\ConexionCondController@searchConductor');
-Route::post('/insertRecarga',    'Apis\ApiRecargaController@insertRecarga');
-Route::get('/getRecargasLast',   'Apis\ApiRecargaController@getRecargasLast');
-Route::get('/getRecargasDate',   'Apis\ApiRecargaController@getRecargasDate');
-
-
-Route::group(['middleware' => 'keyapi'], function () {
-
-});

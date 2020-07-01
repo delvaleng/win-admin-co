@@ -4,7 +4,7 @@
       <tr>
         <th>Accion</th>
         <th>Pais</th>
-        <th>Estado</th>
+        <th>Departamento</th>
         <th>Ciudad</th>
         <th>Estatus</th>
       </tr>
@@ -16,7 +16,7 @@
       <tr>
         <th>Accion</th>
         <th>Pais</th>
-        <th>Estado</th>
+        <th>Departamento</th>
         <th>Ciudad</th>
         <th>Estatus</th>
       </tr>

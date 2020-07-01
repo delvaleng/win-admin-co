@@ -14,7 +14,7 @@ class CreateGetRamaIdFunction extends Migration
      */
     public function up()
     {
-      DB::statement('CREATE FUNCTION getramaid(p_idmenu integer)
+      DB::statement('CREATE OR REPLACE FUNCTION winadmin.getramaid(p_idmenu integer)
         RETURNS character varying AS
       $BODY$
       DECLARE
@@ -25,15 +25,15 @@ class CreateGetRamaIdFunction extends Migration
       /*Obtengo el idseccion del menu actual*/
       SELECT M.section
       INTO v_idseccion
-      FROM win.MAIN M
-      WHERE M.id = p_idmenu;
+      FROM winadmin.main m
+      WHERE m.id = p_idmenu;
 
        /* condición recursiva para obtener la rama de los id */
         IF v_idseccion = 0 THEN
             p_ramaid := p_idmenu::text;
             RETURN p_ramaid;
         ELSE
-            RETURN win.getRamaId(v_idseccion) || "," || p_idmenu::text;
+            RETURN winadmin.getramaid(v_idseccion) || \',\' || p_idmenu::text;
         END IF;
 
       END;

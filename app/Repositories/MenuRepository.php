@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\General\Main;
+use App\Models\Admin\Main;
 use App\Repositories\BaseRepository;
 
 /**
@@ -17,14 +17,13 @@ class MenuRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
-        'description',
-        'section',
-        'path',
-        'icon',
-        'orden',
-        'status_system',
-        'status_user',
-        'modified_by'
+      'main_name',
+  	  'section',
+  	  'path',
+  	  'icon',
+  	  'orden',
+  	  'status',
+  	  'user_id',
     ];
 
     /**

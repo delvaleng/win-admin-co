@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Rol\Menú')
+@section('title', 'Rol Menú')
 
 @section('css')
 @endsection

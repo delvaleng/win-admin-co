@@ -179,11 +179,11 @@ $("#search"  ).click(function() {
           "render": function (data, type, row) {
               return '<a class="modalPermiso"'+
               'data-id  = "'+data+'"'+
-              '><i class="fa fa-star-o"></i></a>';
+              '><i class="btn btn-small fa fa-star-o"></i></a>';
           }},
           {data:"empleado",
           "render": function (data, type, row) {
-            return (data)? convertir(data.usuario.toLowerCase()) : '-';
+            return (data)? convertir(data.first_name.toLowerCase())+' '+convertir(data.last_name.toLowerCase()) : '-';
           }},
           {data:"tp_marcacion",
           "render": function (data, type, row) {

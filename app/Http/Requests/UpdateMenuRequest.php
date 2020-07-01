@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\General\Main;
+use App\Models\Admin\Main;
 
 class UpdateMenuRequest extends FormRequest
 {
@@ -32,7 +32,7 @@ class UpdateMenuRequest extends FormRequest
     public function attributes()
     {
       return [
-        'description' => 'Menú',
+        'main_name'   => 'Menú',
         'section'     => 'Sección',
         'path'        => 'Trayecto',
         'icon'        => 'Icono',

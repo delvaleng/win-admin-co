@@ -1,110 +1,88 @@
 <?php
 
 Route::get('/',         'Auth\LoginController@showLoginForm');
-Route::get('/home',     'Auth\LoginController@home')->name('home');
 Route::post('login',    'Auth\LoginController@login' )->name('login');
 Route::post('logout',   'Auth\LoginController@logout')->name('logout');
 
 
 //GENERALES
-Route::match(['get', 'post'], '/country/{id}',     'General\CountryController@get2'   )->name('country.get');
-Route::match(['get', 'post'], '/departament/{id}', 'General\DepartamentController@get')->name('departaments.get');
-Route::match(['get', 'post'], '/city/{id}',        'General\CityController@get'       )->name('cities.get');
+Route::match(['get', 'post'], '/country/{id}',     'Admin\CountryController@get2'   )->name('country.get');
+Route::match(['get', 'post'], '/departament/{id}', 'Admin\DepartamentController@get')->name('departaments.get');
+Route::match(['get', 'post'], '/city/{id}',        'Admin\CityController@get'       )->name('cities.get');
 
-Route::get('/add/pay',         'app\appController@viewPay');
-Route::post('/add/pay/get/driver',         'app\appController@getDriverPeru');
-Route::post('/add/pay/get/banks',         'app\appController@getBanck');
 
 Route::group(['middleware' => 'auth'], function(){
 
-Route::resource('autorizacionEmpleados',   'Marcacion\AutorizacionEmpleadoController');
-Route::resource('empleados',               'Marcacion\EmpleadoController');
-Route::resource('horarios',                'Marcacion\HorarioController');
-Route::resource('horarioUsers',            'Marcacion\HorarioUserController');
+  Route::get('/home',     'Auth\LoginController@home'  )->name('home');
 
-Route::resource('pais',                    'Marcacion\PaisController');
-Route::resource('permisos',                'Marcacion\PermisoController');
-Route::resource('passwordoEmpleados',      'Marcacion\PasswordoEmpleadoController');
-Route::resource('tpDocumentoIdentidads',   'Marcacion\TpDocumentoIdentidadController');
-Route::resource('tpMarcacions',            'Marcacion\TpMarcacionController');
+  //  ARREGLADO
+  Route::resource('menus',                             'Admin\MenuController' );
+  Route::match(['get', 'post'], '/getMains',           'Admin\MenuController@getMains')->name('menus.get');
+  Route::resource('roles',                             'Admin\RolesController');
+  Route::match(['get', 'post'], '/updateStatusTpRols', 'Admin\RolesController@updateStatus'  );
+  Route::match(['get', 'post'], '/getTpRols',          'Admin\RolesController@getTpRols'     );
+  Route::resource('rol-menus',                         'Admin\RolMenuController'             );
+  Route::match(['get', 'post'], '/getRolMain',         'Admin\RolMenuController@getRolMain'  )->name('rol-menus.get');
+  Route::match(['get', 'post'], '/updateStatusRolMenu','Admin\RolMenuController@updateStatus');
+  Route::resource('rol-usuarios',                      'Admin\RolUsersController'            );
+  Route::match(['get', 'post'], '/getRolUsers',        'Admin\RolUsersController@getRolUsers');
 
+  //USUARIO
+  Route::get ('/usuarios',         			                   'User\UserController@index'       )->name('user.index');
+  Route::match(['get', 'post'],'/getUsers',                'User\UserController@getUsers'    );
+  Route::match(['get', 'post'],'/validUserDni',            'User\UserController@validUserDni');
+  Route::get ('/usuarios/new',         	   	               'User\UserController@create'      )->name('user.create');
+  Route::post('/usernew',         	                       'User\UserController@store'       );
+  Route::match(['get', 'post'],'/validUser',               'User\UserController@validUser'   );
+  Route::match(['get', 'post'],'/userDetails',     			   'User\UserController@userDetails'     );
+  Route::match(['get', 'post'],'/user/rolDetails',         'User\UserController@rolDetails'      );
+  Route::match(['get', 'post'],'/user/rolDetailsSelect',   'User\UserController@rolDetailsSelect');
+  Route::match(['get', 'post'],'/user/updateRolUser',      'User\UserController@updateRolUser'   );
+  Route::match(['get', 'post'],'/user/updatePassword',     'User\UserController@updatePassword'  );
+  Route::match(['get', 'post'],'/user/updateStatus',       'User\UserController@updateStatus'    );
+  Route::match(['get', 'post'],'/user/PermisosDetails',    'User\UserController@PermisosDetails' );
+  Route::match(['get', 'post'],'/user/updatePermisoUser',  'User\UserController@updatePermisoUser');
+  Route::get ('/mi-perfil',                                'User\UserController@miperfil'         )->name('user.mi-perfil');
+  Route::get ('/cambiar-contrasena',                       'User\UserController@changePassword')->name('user.cambiarContrasena');
+	Route::POST('/saveContrasena',                           'User\UserController@savePassword'  )->name('user.saveContrasena');
 
-Route::get('/marcacionsMaps/{long}/{lat}', 'Marcacion\MarcacionController@marcacionsMaps')->name('marcacions.maps');
-Route::get('/marcacions',                  'Marcacion\MarcacionController@index')->name('marcacions.index');
-Route::get('/report',                      'Marcacion\MarcacionController@report')->name('marcacions.report');
-Route::post('/getMarcacions',              'Marcacion\MarcacionController@getMarcacions')->name('marcacions.getMarcacions');
-Route::post('/reportSearch',               'Marcacion\MarcacionController@reportSearch')->name('marcacions.reportSearch');
+  //USUARIO
 
-Route::post('/searchAutorizacion',         'Marcacion\AutorizacionEmpleadoController@searchAutorizacion');
+  //MARCACIONES
+  Route::resource('horarios',                       'Marcacion\HorarioController');
+  Route::post('/marcando',                          'Marcacion\MarcacionController@store')->name('marcaciones.store');
+  Route::get('/marcaciones',                        'Marcacion\MarcacionController@index')->name('marcaciones.index');
+  Route::resource('marcaciones-conf-tipo',          'Marcacion\TpMarcacionController');
+  Route::resource('marcaciones-conf-horarios',      'Marcacion\HorarioUserController');
+  Route::resource('marcaciones-autorizaciones',     'Marcacion\AutorizacionEmpleadoController'  );
+  Route::match(['get', 'post'],'/getAutorizaciones','Marcacion\AutorizacionEmpleadoController@getAutorizaciones')->name('marcaciones-autorizaciones.search');
+  Route::get('/marcaciones-reporte-general',        'Marcacion\MarcacionController@report'      )->name('marcacions.report');
+  Route::post('/reportSearch',                      'Marcacion\MarcacionController@reportSearch')->name('marcacions.reportSearch');
+  Route::post('/searchAutorizacion',                'Marcacion\AutorizacionEmpleadoController@searchAutorizacion');
 
-Route::post('/sendAutorizacion',           'Marcacion\AutorizacionEmpleadoController@sendAutorizacion');
-
-//USUARIO
-Route::get ('/users',         			             			   'User\UserController@index'           )->name('user.index');
-Route::get ('/user/add',         	               			   'User\UserController@create'          )->name('user.create');
-Route::post('/usernew',         	               			   'User\UserController@store'           );
-Route::match(['get', 'post'],'/usersAll',        			   'User\UserController@usersAll'        );
-Route::match(['get', 'post'],'/userDetails',     			   'User\UserController@userDetails'     );
-Route::match(['get', 'post'],'/user/rolDetails',         'User\UserController@rolDetails'      );
-Route::match(['get', 'post'],'/user/rolDetailsSelect',   'User\UserController@rolDetailsSelect');
-Route::match(['get', 'post'],'/user/updateRolUser',      'User\UserController@updateRolUser'   );
-Route::match(['get', 'post'],'/user/validUser',          'User\UserController@validUser'       );
-Route::match(['get', 'post'],'/user/updatePassword',     'User\UserController@updatePassword'  );
-Route::match(['get', 'post'],'/user/updateStatus',       'User\UserController@updateStatus'    );
-Route::match(['get', 'post'],'/user/validUserDni',       'User\UserController@validUser'       );
-Route::match(['get', 'post'],'/user/PermisosDetails',    'User\UserController@PermisosDetails' );
-Route::match(['get', 'post'],'/user/updatePermisoUser',  'User\UserController@updatePermisoUser');
-
-
-Route::resource('menus',                              'General\MenuController'         );
-Route::resource('rol-menus',                          'General\MenuController'         );
-Route::match(['get', 'post'], '/getMains',            'General\MenuController@getMains')->name('menus.get');
-
-Route::resource('roles',                              'General\TpRolController'             );
-Route::match(['get', 'post'], '/updateStatusTpRols',  'General\TpRolController@updateStatus');
-Route::match(['get', 'post'], '/getTpRols',           'General\TpRolController@getTpRols'   );
-
-Route::resource('rol-menus',                          'General\RolMenuController'             );
-Route::match(['get', 'post'], '/getRolMain',          'General\RolMenuController@getRolMain'  )->name('rol-menus.get');
-Route::match(['get', 'post'], '/updateStatusRolMenu', 'General\RolMenuController@updateStatus');
-
-Route::resource('estatus-recargas',                   'General\StatusRecargaController');
-
-//DIRECCIONES
-//TIPO PAIS
-Route::resource('pais',                         'General\CountryController');
-Route::match(['get', 'post'],'/getCountries',   'General\CountryController@get');
-Route::match(['get', 'post'],'/statusCountries','General\CountryController@status');
-//TIPO DEPARTAMENTO
-Route::resource('estados',                      'General\DepartamentController');
-Route::match(['get', 'post'],'/getEstados',     'General\DepartamentController@get');
-Route::match(['get', 'post'],'/statusEstados',  'General\DepartamentController@status');
-//TIPO CITY
-Route::resource('ciudad',                       'General\CityController');
-Route::match(['get', 'post'],'/getCities',      'General\CityController@getCities');
-Route::match(['get', 'post'],'/statusCities',   'General\CityController@status');
+  Route::get('/marcacionsMaps/{long}/{lat}',        'Marcacion\MarcacionController@marcacionsMaps')->name('marcacions.maps');
+  Route::post('/getMarcacions',                     'Marcacion\MarcacionController@getMarcacions')->name('marcacions.getMarcacions');
+  Route::post('/sendAutorizacion',                  'Marcacion\AutorizacionEmpleadoController@sendAutorizacion');
+  //MARCACIONES
 
 
-Route::resource('saldos',                           'Driver\SaldoController');
-Route::match(['get', 'post'], '/getDataSaldo',      'Driver\SaldoController@getData');
-Route::match(['get', 'post'], '/updateStatusSaldo', 'Driver\SaldoController@updateStatus');
-
-Route::match(['get', 'post'], '/searchConductor',    'Apis\ConexionCondController@searchConductor');
-Route::match(['get', 'post'], '/getDataConductorId', 'Apis\ConexionCondController@searchConductorNames');
-
-
-//RECARGAS
-Route::match(['get', 'post'], '/recargas-pendientes',   'Driver\RecargaController@pendientes');
-Route::match(['get', 'post'], '/getDataPendientes',     'Driver\RecargaController@getDataPendientes');
-Route::match(['get', 'post'], '/getDataRecargaId',      'Driver\RecargaController@getDataRecargaId');
-
-
-Route::match(['get', 'post'], '/recargas-generales',        'Driver\RecargaController@generales');
-Route::match(['get', 'post'], '/getDataGenerales',          'Driver\RecargaController@getDataGenerales');
-Route::match(['get', 'post'], '/sendFormData',              'Driver\RecargaController@sendFormData');
-
-//APIS
-Route::match(['get', 'post'], '/getConductorPeru/{query}',   'Apis\ConexionCondController@getConductorPeru');
+  //DIRECCIONES
+  //TIPO PAIS
+  Route::resource('pais',                         'Admin\CountryController');
+  Route::match(['get', 'post'],'/getCountries',   'Admin\CountryController@get');
+  Route::match(['get', 'post'],'/statusCountries','Admin\CountryController@status');
+  //TIPO DEPARTAMENTO
+  Route::resource('departamentos',                'Admin\StateController');
+  Route::match(['get', 'post'],'/getState',       'Admin\StateController@get');
+  Route::match(['get', 'post'],'/statusEstados',  'Admin\StateController@status');
+  //TIPO CITY
+  Route::resource('ciudades',                     'Admin\CityController');
+  Route::match(['get', 'post'],'/getCities',      'Admin\CityController@getCities');
+  Route::match(['get', 'post'],'/statusCities',   'Admin\CityController@status');
+  //  ARREGLADO
+  Route::resource('tp-documentos-identidad',      'Admin\TpDocumentIdentController');
+  Route::resource('auditoria',                    'Auditoria\AuditoriaController');
+  Route::match(['get', 'post'],'/getAuditoria',   'Auditoria\AuditoriaController@get');
 
 
 });//FIN DE SESSION

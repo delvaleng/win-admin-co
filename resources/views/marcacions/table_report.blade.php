@@ -1,5 +1,5 @@
 <div class="table-responsive">
-  <table id="marcacionsReport-table" class="display compact" width="100%">
+  <table class="stripe row-border order-column compact" id="marcacionsReport-table">
     <thead>
       <tr>
         <th>N°</th>

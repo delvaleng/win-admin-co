@@ -2,14 +2,14 @@
 <!-- Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('id', 'Empleado:') !!}
-    <p>{!! $horario->horarioEmpleado[0]->nombre !!} {!! $horario->horarioEmpleado[0]->apellido  !!}</p>
+    <p>{!! $horario->horarioEmpleado[0]->first_name !!} {!! $horario->horarioEmpleado[0]->last_name  !!}</p>
 </div>
 @endif
 
 <!-- Dia Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('dia', 'D&iacute;a:') !!}
-    {!! Form::text('dia', null, ['class' => 'form-control']) !!}
+    {!! Form::text('dia', null, ['class' => 'form-control', 'readonly']) !!}
 </div>
 <!-- Dia Field -->
 <div class="form-group col-sm-6">
@@ -26,8 +26,8 @@
 <div class="form-group col-sm-6">
     {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
     @if($horario != null)
-      <a href="{!! route('horarioUsers.show', [$horario->id_horario_user]) !!}" class="btn btn-default">Cancelar</a>
+      <a href="{!! route('marcaciones-conf-horarios.show', [$horario->id_horario_user]) !!}" class="btn btn-default">Cancelar</a>
     @else
-      <a href="{!! route('horarioUsers.index') !!}" class="btn btn-default">Cancelar</a>
+      <a href="{!! route('marcaciones-conf-horarios.index') !!}" class="btn btn-default">Cancelar</a>
     @endif
 </div>

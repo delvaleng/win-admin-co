@@ -7,19 +7,7 @@
 <link rel="stylesheet" href="{{ asset('bower_components/bootstrap-daterangepicker/daterangepicker.css') }}">
 <link rel="stylesheet" href="{{ asset('alertify/css/alertify.min.css') }}">
 <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
-
-<style>
-  th, td { white-space: nowrap; }
-  div.dataTables_wrapper {
-    margin: 0 auto;
-  }
-  div.container {
-    width: 80%;
-  }
-  th { font-size: 12px; }
-  td { font-size: 11px; }
-  label { font-size: 12px; }
-</style>
+<link rel="stylesheet" href="{{ asset('css/table-small.css') }}"/>
 @endsection
 
 @section('content')
@@ -91,7 +79,7 @@
       </div>
       <div class="modal-body">
         <div class="row" style="padding-left: 20px; padding-right:  20px">
-          {!! Form::open(['route' => 'autorizacionEmpleados.store', 'id'=>'formAutorizacionEmpleados']) !!}
+          {!! Form::open(['route' => 'marcaciones-autorizaciones.store', 'id'=>'formAutorizacionEmpleados']) !!}
             @include('autorizacion_empleados.fields_modal')
           {!! Form::close() !!}
         </div>

@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Marcacion;
 
-use App\Http\Requests\CreateMarcacionRequest;
-use App\Http\Requests\UpdateMarcacionRequest;
-use App\Repositories\MarcacionRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\PasswordoEmpleado;
-use App\Models\TpMarcacion;
-use App\Models\Marcacion;
-use App\Models\Empleado;
-use App\Models\HorarioUser;
 
-use App\Models\AutorizacionEmpleado;
-use App\Models\Horario;
-use App\Models\General\Main;
+use App\Models\Marcaciones\AutorizacionEmpleado;
+use App\Models\Marcaciones\HorarioUser;
+use App\Models\Marcaciones\Marcacion;
+use App\Models\Marcaciones\Horario;
+
+use App\Models\Admin\TpMarcacion;
+use App\Models\Admin\User;
+
+use App\Models\Admin\RolUser;
+use App\Models\Admin\RolMain;
+use App\Models\Admin\Main;
 use App\Classes\MainClass;
+
 use Flash;
 use Excel;
 use DateTime;
@@ -25,60 +26,119 @@ use Response;
 
 class MarcacionController extends AppBaseController
 {
-    /** @var  MarcacionRepository */
-    private $marcacionRepository;
+    private $menuid = 9;
 
-    public function __construct(MarcacionRepository $marcacionRepo)
+    public function validPermisoMenu()
     {
-        $this->marcacionRepository = $marcacionRepo->with('empleado', 'tpMarcacion');
+      $roles = RolUser::where('user_id', auth()->user()->id)->get();
+      foreach ($roles as $key) {
+        if($key->role_id == 1){
+          return true;
+        }
+        else{
+          $menu = RolMain::where('role_id', $key->role_id)
+          ->where('main_id', $this->menuid)->first();
+          if($menu){
+            return true;
+          }
+        }
+      }
+      return false;
     }
 
-    /**
-     * Display a listing of the Marcacion.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
+    public function store()
+    {
+
+      if($this->isMobile()){
+        Flash::error('Debe conectarse desde un ordenador para que pueda realizar la marcación!');
+        return redirect(route('home'));
+      }
+
+
+      $input           = request()->all();
+      // VALIDO QUE LOS DATOS REQUERIDOS
+        $validator = \Validator::make($input, [
+            'id_tp_marcacion' => 'required'
+            // 'latitud'         => 'required',
+          ],
+          [
+           'id_tp_marcacion.required' => 'El tipo de marcacion es un campo obligatorio.',
+           'latitud.required'         => 'Debes activar tu ubicación.',
+         ]);
+        if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          return \Redirect::back()->withErrors($errors);
+        }
+        $validDay = Marcacion::where('dia', date("Y-m-d"))->where('id_tp_marcacion', $input{'id_tp_marcacion'})->where('id_user', auth()->user()->id)->first();
+        if ($validDay) {
+          Flash::error('<li>Ya se registro este tipo de marcación</li>');
+          return redirect(route('home'));
+        }
+      // VALIDO QUE LOS DATOS REQUERIDOS.
+
+        $marcar =[
+          'id_user'          => auth()->user()->id,
+          'id_tp_marcacion'  => $input{'id_tp_marcacion'},
+          'dia'              => date("Y-m-d"),
+          'hora_inicio'      => date('H:i:s'),
+          'observacion'      => $input{'observacion'},
+          'latitud'          => $input{'latitud'},
+          'longitud'         => $input{'longitud'},
+          'ip_ubicacion'     => $this->getRealIP(),//$input{'longitud'},
+          'dispositivo'      => 'ORDENADOR'
+        ];
+        Marcacion::create($marcar);
+
+        if($input{'id_tp_marcacion'} > 1){
+
+          $validDay      = Marcacion::where('dia', date("Y-m-d"))->where('id_tp_marcacion', ($input{'id_tp_marcacion'}-1))
+          ->where('id_user', auth()->user()->id)
+          ->orderBy('id_tp_marcacion', 'desc')->first();
+
+          $fecha1 = \DateTime::createFromFormat('Y-m-d H:i:s',$validDay->created_at ); //new DateTime("2010-07-28 01:15:52");
+          $fecha2 = new DateTime(now());
+          $fecha    = $fecha1->diff($fecha2);
+          $hora     = $fecha->format('%H');
+          $minutos  = $fecha->format('%i');
+
+
+          $validDay->hora_fin  = date('H:i:s');
+          $validDay->total_min = $minutos+($hora*60);
+          $validDay->update();
+        }
+
+          Flash::success('Marcacion guardada correctamente.');
+
+          return redirect(route('home'));
+
+
+
+
+    }
+
     public function index( )
     {
       $main = new MainClass();
       $main = $main->getMain();
 
-      $tpempleado       =  Empleado::where('status', TRUE)
-      ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
-      ->orderBy('name',  'ASC')
-      ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
 
-        $marcacions = $this->marcacionRepository
-        ->with('empleado', 'tpMarcacion')
-        ->all();
+      $tpempleado       =  User::where('status', TRUE)->where('employe', true)
+      ->select(DB::raw("UPPER(CONCAT(last_name,'  ', first_name)) AS name"), "users.id as id")
+      ->orderBy('name',  'ASC')
+      ->pluck( '(last_name||" " ||first_name)as name', 'users.id as id');
 
         return view('marcacions.index')
-        ->with('marcacions', $marcacions)
         ->with('tpempleado', $tpempleado)
         ->with('main',       $main);
 
     }
-    public function marcacionsMaps($long, $lat) {
-      $long=$long; $lat=$lat;
-      return view('marcacions.maps', compact('long','lat'));
-    }
-    public function report()
+
+    public function getMarcacions()
     {
-      $main = new MainClass();
-      $main = $main->getMain();
-
-      $tpempleado       =  Empleado::where('status', TRUE)
-      ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
-      ->orderBy('name',  'ASC')
-      ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
-
-      return view('marcacions.report', compact('tpempleado'))
-      ->with('main', $main);
-    }
-
-    public function getMarcacions() {
       // code...
       $formulario  = request()->formulario;
       $marcacions  = (new Marcacion)->with('empleado', 'tpMarcacion')->newQuery();
@@ -90,7 +150,7 @@ class MarcacionController extends AppBaseController
         $marcacions  = $marcacions->whereBetween('dia',  [date("Y-m-d", strtotime($startDate) ), date("Y-m-d", strtotime($endDate  ) ) ] ); }
 
       if ($formulario{'id_empleado'}) {
-        $marcacions  = $marcacions->where('id_empleado', $formulario{'id_empleado'});
+        $marcacions  = $marcacions->where('id_user', $formulario{'id_empleado'});
       }
 
           $marcacions = $marcacions->get();
@@ -100,29 +160,56 @@ class MarcacionController extends AppBaseController
           ]);
 
     }
+
+
+
+
+
+    public function marcacionsMaps($long, $lat)
+    {
+      $long=$long; $lat=$lat;
+      return view('marcacions.maps', compact('long','lat'));
+    }
+
+
+    public function report()
+    {
+      $main = new MainClass();
+      $main = $main->getMain();
+
+      $valor = $this->validPermisoMenu();
+      if ($valor == false){
+        return view('errors.403', compact('main'));
+      }
+
+      $tpempleado  =  User::where('status', TRUE)->where('employe', true)
+            ->select(DB::raw("UPPER(CONCAT(last_name,'  ', first_name)) AS name"), "users.id as id")
+            ->orderBy('name',  'ASC')
+            ->pluck( '(last_name||" " ||first_name)as name', 'users.id as id');
+
+
+      return view('marcacions.report', compact('tpempleado'))
+      ->with('main', $main);
+    }
+
+
+
+
+
     public function reportSearch()
     {
       $datos =[];
       $formulario  = request()->formulario;
 
       $marcacions  = (new Marcacion)->newQuery();
-      $mes         = $formulario{'mes'};
-      $year        = $formulario{'year'};
-      $startDia    = '01';
-      $endDia      =  strval(cal_days_in_month(CAL_GREGORIAN, $mes, $year));
-
-      $startDate   = strtotime($year.'-'.$mes.'-01');
-      $endDate     = strtotime($year.'-'.$mes.'-'.$endDia);
-      $startDate   = date('Y-m-d',$startDate);
-      $endDate     = date('Y-m-d',$endDate);
-
       if ($formulario{'id_empleado'}) {
-        $marcacions  = $marcacions->where('id_empleado', $formulario{'id_empleado'});
+        $marcacions  = $marcacions->where('id_user', $formulario{'id_empleado'});
       }
 
-      $marcacions  = $marcacions->whereBetween('dia',[$startDate, $endDate] );
+      $marcacions  = $marcacions->whereBetween('dia',[$formulario{'startDate'}, $formulario{'endDate'}] );
       $marcacions  = $marcacions->where('id_tp_marcacion','1');
       $marcacions  = $marcacions->with('empleado', 'tpMarcacion')->orderBy('dia', 'asc')->get();
+
       $i = 0;
       $total_positivo = 0;
       $total_negativo = 0;
@@ -130,12 +217,12 @@ class MarcacionController extends AppBaseController
       foreach ($marcacions as $key) {
 
         $dia_letra     =  $this->conocerDiaSemanaFecha($key->dia);
-        $horarioUser   = HorarioUser::where('id_empleado', $key->id_empleado)->first();
+        $horarioUser   = HorarioUser::where('id_user', $key->id_user)->first();
 
-        $searchHorario = Horario::where('dia', $dia_letra)->where('id_horario_user', $horarioUser->id)->first();
-        $salidaQuery   = Marcacion::where('dia', $key->dia)
+        $searchHorario = Horario::where('dia',   $dia_letra)->where('id_horario_user', $horarioUser->id)->first();
+        $salidaQuery   = Marcacion::where('dia', $key->dia )
           ->where('id_tp_marcacion', 4)
-          ->where('id_empleado', $key->id_empleado)
+          ->where('id_user', $key->id_user)
           ->first();
 
         $entrada       = $searchHorario->entrada;
@@ -168,8 +255,8 @@ class MarcacionController extends AppBaseController
         $dato = [
           'id'                  => $key->id,
           'num'                 => ++$i,
-          'nombre'              => ($key->id_empleado) ? $key->empleado->nombre   : '-',
-          'apellido'            => ($key->id_empleado) ? $key->empleado->apellido : '-',
+          'nombre'              => ($key->id_user) ? $key->empleado->first_name   : '-',
+          'apellido'            => ($key->id_user) ? $key->empleado->last_name    : '-',
           'dia_letra'           => $dia_letra,
           'fecha'               => date_format( $key->dia, 'd-m-Y'),
           'entrada'             => date("g:i a",strtotime($entrada)),
@@ -266,136 +353,40 @@ class MarcacionController extends AppBaseController
       ];
     }
 
-    function getRealIP(){
 
-           if (isset($_SERVER["HTTP_CLIENT_IP"])){
-
-               return $_SERVER["HTTP_CLIENT_IP"];
-
-           }elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"])){
-
-               return $_SERVER["HTTP_X_FORWARDED_FOR"];
-
-           }elseif (isset($_SERVER["HTTP_X_FORWARDED"])){
-
-               return $_SERVER["HTTP_X_FORWARDED"];
-
-           }elseif (isset($_SERVER["HTTP_FORWARDED_FOR"])){
-
-               return $_SERVER["HTTP_FORWARDED_FOR"];
-
-           }elseif (isset($_SERVER["HTTP_FORWARDED"])){
-
-               return $_SERVER["HTTP_FORWARDED"];
-
-           }else{
-
-               return $_SERVER["REMOTE_ADDR"];
-
-           }
-       }
-
-
-    public function marcar()
+    function getRealIP()
     {
 
-      $empleado       =  Empleado::where('status', TRUE)
-      ->select(DB::raw("UPPER(CONCAT(apellido,'  ', nombre)) AS name"), "empleados.id as id")
-      ->orderBy('name',  'ASC')
-      ->pluck( '(apellido||" " ||nombre)as name', 'empleados.id as id');
+     if (isset($_SERVER["HTTP_CLIENT_IP"])){
 
-      $tpmarcacion   = TpMarcacion::WHERE('status', '=', 'TRUE')->orderBy('id', 'ASC')->pluck('descripcion', 'id');
+         return $_SERVER["HTTP_CLIENT_IP"];
 
-      return view('marcacions.marcar', compact('tpmarcacion', 'empleado'));
+     }elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"])){
+
+         return $_SERVER["HTTP_X_FORWARDED_FOR"];
+
+     }elseif (isset($_SERVER["HTTP_X_FORWARDED"])){
+
+         return $_SERVER["HTTP_X_FORWARDED"];
+
+     }elseif (isset($_SERVER["HTTP_FORWARDED_FOR"])){
+
+         return $_SERVER["HTTP_FORWARDED_FOR"];
+
+     }elseif (isset($_SERVER["HTTP_FORWARDED"])){
+
+         return $_SERVER["HTTP_FORWARDED"];
+
+     }else{
+
+         return $_SERVER["REMOTE_ADDR"];
+
+     }
     }
 
 
-    /**
-     * Show the form for creating a new Marcacion.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-      $main = new MainClass();
-      $main = $main->getMain();
-
-        return view('marcacions.create')
-        ->with('main', $main);
-    }
-
-    /**
-     * Store a newly created Marcacion in storage.
-     *
-     * @param CreateMarcacionRequest $request
-     *
-     * @return Response
-     */
-    public function store()
-    {
-
-        $input           = request()->all();
-        $password        = $input{'password'};
-        $id_empleado     = $input{'id_empleado'};
-        $id_tp_marcacion = $input{'id_tp_marcacion'};
-        $validPass       = PasswordoEmpleado::where('password', $password)->where('id_empleado',$id_empleado)->where('status', TRUE)->first();
-
-        if (!$validPass) {
-            Flash::error('Contraseña no valida!');
-            return redirect(route('marcacions.marcar'));
-        }
-        $validDay      = Marcacion::where('dia', date("Y-m-d"))->where('id_tp_marcacion', $id_tp_marcacion)->where('id_empleado', $id_empleado)->first();
-
-        if ($validDay) {
-            Flash::error('Para este dia ya se realizo este tipo de marcacion!');
-            return redirect(route('marcacions.marcar'));
-        }else{
-          $marcar =[
-            'id_empleado'      => $input{'id_empleado'},
-            'id_tp_marcacion'  => $input{'id_tp_marcacion'},
-            'dia'              => date("Y-m-d"),
-            'hora_inicio'      => date('H:i:s'),
-            'observacion'      => $input{'observacion'},
-            'latitud'          => $input{'latitud'},
-            'longitud'         => $input{'longitud'},
-            'ip_ubicacion'     => $this->getRealIP(),//$input{'longitud'},
-
-          ];
-          Marcacion::create($marcar);
-          if($id_tp_marcacion > 1){
-            $validDay      = Marcacion::where('dia', date("Y-m-d"))->where('id_tp_marcacion', '!=', $id_tp_marcacion)
-            ->where('id_empleado', $id_empleado)
-            ->orderBy('id_tp_marcacion', 'desc')->first();
-
-            $fecha1 = \DateTime::createFromFormat('Y-m-d H:i:s',$validDay->created_at ); //new DateTime("2010-07-28 01:15:52");
-            $fecha2 = new DateTime(now());
-            $fecha    = $fecha1->diff($fecha2);
-            $hora     = $fecha->format('%H');
-            $minutos  = $fecha->format('%i');
 
 
-
-            $validDay->hora_fin  = date('H:i:s');
-            $validDay->total_min = $minutos+($hora*60);
-            $validDay->update();
-          }
-
-          Flash::success('Marcacion guardada correctamente.');
-
-          return redirect(route('marcacions.marcar'));
-        }
-
-
-
-    }
-
-    /**
-     * Display the specified Marcacion.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
     public function show($id)
     {
       $main = new MainClass();
@@ -414,79 +405,11 @@ class MarcacionController extends AppBaseController
         ->with('main',      $main);
     }
 
-    /**
-     * Show the form for editing the specified Marcacion.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
-    {
-      $main = new MainClass();
-      $main = $main->getMain();
-
-        $marcacion = $this->marcacionRepository->find($id);
-
-        if (empty($marcacion)) {
-            Flash::error('Marcacion no encontrado');
-
-            return redirect(route('marcacions.index'));
-        }
-
-        return view('marcacions.edit')
-        ->with('marcacion', $marcacion)
-        ->with('main',      $main);
+    /**@valido que sea mobile o no!  */
+    function isMobile() {
+      return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini
+    |mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
     }
 
-    /**
-     * Update the specified Marcacion in storage.
-     *
-     * @param int $id
-     * @param UpdateMarcacionRequest $request
-     *
-     * @return Response
-     */
-    public function update($id, UpdateMarcacionRequest $request)
-    {
-        $marcacion = $this->marcacionRepository->find($id);
 
-        if (empty($marcacion)) {
-            Flash::error('Marcacion no encontrado');
-
-            return redirect(route('marcacions.index'));
-        }
-
-        $marcacion = $this->marcacionRepository->update($request->all(), $id);
-
-        Flash::success('Marcacion actualizada exitosamente.');
-
-        return redirect(route('marcacions.index'));
-    }
-
-    /**
-     * Remove the specified Marcacion from storage.
-     *
-     * @param int $id
-     *
-     * @throws \Exception
-     *
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        $marcacion = $this->marcacionRepository->find($id);
-
-        if (empty($marcacion)) {
-            Flash::error('Marcacion no encontrado');
-
-            return redirect(route('marcacions.index'));
-        }
-
-        $this->marcacionRepository->delete($id);
-
-        Flash::success('Marcacion eliminado exitosamente.');
-
-        return redirect(route('marcacions.index'));
-    }
 }

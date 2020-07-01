@@ -18,7 +18,7 @@
       <div class="box-body">
         <div class="row">
           {!! Form::open(['route' => 'rol-usuarios.store' , 'id'=>'formCreateRolUsers']) !!}
-            @include('panel.rol_users.fields')
+            @include('rol_users.fields')
           {!! Form::close() !!}
         </div>
       </div>

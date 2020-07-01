@@ -1,43 +1,49 @@
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('country', 'Pa&iacute;s:') !!}
-  {!! Form::text('country', null, ['class' => 'form-control']) !!}
+  {!! Form::label('country_name', 'Pa&iacute;s:') !!}
+  {!! Form::text('country_name', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('code', 'C&oacute;digo:') !!}
-  {!! Form::text('code', null, ['class' => 'form-control']) !!}
+  {!! Form::label('area_code', 'C&oacute;digo Pais:') !!}
+  {!! Form::text('area_code', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('moneda_local', 'Moneda/Local:') !!}
-  {!! Form::text('moneda_local', null, ['class' => 'form-control']) !!}
+  {!! Form::label('code', 'C&oacute;digo &Aacute;rea:') !!}
+  {!! Form::text('code', null, ['class' => 'form-control', 'placeholder'=> '+51']) !!}
 </div>
 
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('moneda_admitida', 'Moneda/Admitida:') !!}
-  {!! Form::text('moneda_admitida', null, ['class' => 'form-control']) !!}
+  {!! Form::label('national_currency', 'Moneda/Local:') !!}
+  {!! Form::text('national_currency', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('simbolo_local', 'S&iacute;mbolo/Local:') !!}
-  {!! Form::text('simbolo_local', null, ['class' => 'form-control']) !!}
+  {!! Form::label('foreign_currency', 'Moneda/Admitida:') !!}
+  {!! Form::text('foreign_currency', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('simbolo_admitida', 'S&iacute;mbolo/Admitida:') !!}
-  {!! Form::text('simbolo_admitida', null, ['class' => 'form-control']) !!}
+  {!! Form::label('national_symbol', 'S&iacute;mbolo/Local:') !!}
+  {!! Form::text('national_symbol', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Country Field -->
 <div class="form-group col-sm-6">
-  {!! Form::label('conversion_monto', 'Conversi&oacute;n/Monto:') !!}
-  {!! Form::text('conversion_monto', null, ['class' => 'form-control']) !!}
+  {!! Form::label('foreign_symbol', 'S&iacute;mbolo/Admitida:') !!}
+  {!! Form::text('foreign_symbol', null, ['class' => 'form-control']) !!}
+</div>
+
+<!-- Country Field -->
+<div class="form-group col-sm-6">
+  {!! Form::label('convert_mount', 'Conversi&oacute;n/Monto:') !!}
+  {!! Form::text('convert_mount', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Submit Field -->

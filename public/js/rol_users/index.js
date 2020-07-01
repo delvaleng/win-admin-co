@@ -36,16 +36,15 @@ $(document).ready(function() {
               "render": function (data, type, row) {
                 return '<div class="btn-group">'+
                 '<a href="/rol-usuarios/'+data+'"      class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i></a>'+
-                '<a href="/rol-usuarios/'+data+'/edit" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"></i></a>'+
                 '</div>';
               }},
-              {data:"id_user",
+              {data:"user_id",
               "render": function (data, type, row) {
-               return (data) ? row.get_users.email : '-' ;
+               return (data) ? row.get_users.username : '-' ;
               }},
-              {data:"id_tp_rol",
+              {data:"role_id",
               "render": function (data, type, row) {
-               return (data) ? row.get_tp_rol.descripcion : '-';
+               return (data) ? row.get_tp_rol.role_name : '-';
               }},
               {data:"status",
              "render": function (data, type, row) {
