@@ -292,8 +292,8 @@ class UserController extends Controller
           ->first();
         $roluser = $rol{'id_roluser'};
 
-        $permissions = Rol_permissions::where('id_roluser', '=', $roluser);
-        $permissions->delete();
+        // $permissions = Rol_permissions::where('id_roluser', '=', $roluser);
+        // $permissions->delete();
 
         $RolUser = RolUser::where('user_id', '=', $id_user);
         $RolUser->delete();
