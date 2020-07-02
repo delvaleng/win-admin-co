@@ -23,11 +23,11 @@ $(document).ready(function() {
         if(position.coords.latitude != null && position.coords.longitude != null){
         var distancia = Dist(lat1, lon1, position.coords.latitude, position.coords.longitude);
         console.log('distancia?:' + distancia);
-          if(distancia > 1){
-            $(".btnSend").attr("disabled", true);
-          }else {
-            $(".btnSend").attr("disabled", false);
-          }
+          // if(distancia > 1){
+          //   $(".btnSend").attr("disabled", true);
+          // }else {
+          //   $(".btnSend").attr("disabled", false);
+          // }
         }
       });
   }
