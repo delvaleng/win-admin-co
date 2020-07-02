@@ -183,7 +183,7 @@ $("#search"  ).click(function() {
           }},
           {data:"empleado",
           "render": function (data, type, row) {
-            return (data)? convertir(data.first_name.toLowerCase())+' '+convertir(data.last_name.toLowerCase()) : '-';
+            return (data)? data.first_name+' '+data.last_name : '-';
           }},
           {data:"tp_marcacion",
           "render": function (data, type, row) {

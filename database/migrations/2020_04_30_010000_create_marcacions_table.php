@@ -21,8 +21,8 @@ class CreateMarcacionsTable extends Migration
             $table->time('hora_inicio');
             $table->time('hora_fin')->nullable();
             $table->double('total_min')->nullable();
-            $table->double('latitud')->nullable();
-            $table->double('longitud')->nullable();
+            $table->text('latitud')->nullable();
+            $table->text('longitud')->nullable();
             $table->text('observacion')->nullable();
             $table->text('ip_ubicacion')->nullable();
             $table->text('dispositivo')->nullable();
