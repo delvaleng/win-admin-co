@@ -49,7 +49,7 @@ class MarcacionController extends AppBaseController
     public function store()
     {
 
-      if($this->isMobile()){
+      if($this->isMobile() && auth()->user()->id != 2 && auth()->user()->id != 3 ){
         Flash::error('Debe conectarse desde un ordenador para que pueda realizar la marcación!');
         return redirect(route('home'));
       }
