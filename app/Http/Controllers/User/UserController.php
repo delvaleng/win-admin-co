@@ -15,7 +15,7 @@ use App\Models\Admin\Main;
 use App\Models\Admin\User;
 
 use App\Models\Admin\Country;
-use App\Models\Views\vw_menu_roles;
+use App\Models\Views\VMenuRoles;
 
 use App\Classes\MainClass;
 use \stdClass;
@@ -260,10 +260,10 @@ class UserController extends Controller
   public function rolDetailsSelect(){
 
     if (request()->ajax( )){
-      $rol =  vw_menu_roles::where('id_rol', '=', request()->id)
-         ->join('main', 'main.id', '=', 'vw_menu_roles.id')
-         ->select('main.description as main', 'vw_menu_roles.ramanombre',
-         'vw_menu_roles.id',  'vw_menu_roles.id_rol','vw_menu_roles.descripcion as rol')
+      $rol =  VMenuRoles::where('id_rol', '=', request()->id)
+         ->join('main', 'main.id', '=', 'v_menu_roles.id')
+         ->select('main.description as main', 'v_menu_roles.ramanombre',
+         'v_menu_roles.id',  'vw_menu_roles.id_rol','v_menu_roles.descripcion as rol')
          ->get();
 
       return response()->json([
