@@ -37,11 +37,11 @@ $(document).ready(function() {
       "endDate"  : moment()
    },
   }).on('apply.daterangepicker', function (e, picker) {
-    $("#startDate").val(picker.startDate.format('DD-MM-YYYY'));
-    $("#endDate").val(picker.endDate.format('DD-MM-YYYY'));
+    $("#startDate").val(picker.startDate.format('YYYY-MM-DD'));
+    $("#endDate").val(picker.endDate.format('YYYY-MM-DD'));
   });
   $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
-    $(this).val(picker.startDate.format('MM-DD-YYYY') + ' - ' + picker.endDate.format('MM-DD-YYYY'));
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
   });
   $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
     $(this).val('');
