@@ -85,3 +85,7 @@
 @endif
 
 @endsection
+
+@section('js')
+<script src="{{ asset('js/marcacions/create.js')}} "></script>
+@endsection

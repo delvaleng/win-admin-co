@@ -41,19 +41,11 @@ $(document).ready(function() {
 
     if($("#longitud").val() == '' ||  $("#latitud").val() == ''){
       flag = false;
-      mensaje += 'Debeer permitir tu ubicacion\n';
-    }
-    if($("#id_empleado").val() == ''){
-      flag = false;
-      mensaje += 'Debes seleccionar el empleado\n';
+      mensaje += 'Debes permitir tu ubicacion\n';
     }
     if($("#id_tp_marcacion").val() == ''){
       flag = false;
       mensaje += 'Debes seleccionar el tipo de marcación\n';
-    }
-    if($("#password").val() == ''){
-      flag = false;
-      mensaje += 'Indica tu clave\n';
     }
     if(flag == false){
       alert(mensaje);

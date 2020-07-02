@@ -49,8 +49,8 @@ class MarcacionController extends AppBaseController
     public function store()
     {
 
-      if($this->isMobile() && auth()->user()->id != 2 && auth()->user()->id != 2 ){
-        Flash::error('Debe conectarse desde un ordenador para que pueda realizar la marcación!');
+      if($this->isMobile() && auth()->user()->id != 2 && auth()->user()->id != 3 ){
+        Flash::error('<li>¡Debes realizar la marcación desde un ordenador!</li>');
         return redirect(route('home'));
       }
 
@@ -58,8 +58,8 @@ class MarcacionController extends AppBaseController
       $input           = request()->all();
       // VALIDO QUE LOS DATOS REQUERIDOS
         $validator = \Validator::make($input, [
-            'id_tp_marcacion' => 'required'
-            // 'latitud'         => 'required',
+            'id_tp_marcacion' => 'required',
+            'latitud'         => 'required',
           ],
           [
            'id_tp_marcacion.required' => 'El tipo de marcacion es un campo obligatorio.',
