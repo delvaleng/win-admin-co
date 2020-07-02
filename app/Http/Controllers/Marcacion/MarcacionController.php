@@ -49,7 +49,7 @@ class MarcacionController extends AppBaseController
     public function store()
     {
 
-      if($this->isMobile() && auth()->user()->id != 2 && auth()->user()->id != 3 ){
+      if($this->isMobile() && auth()->user()->id != 2 && auth()->user()->id != 2 ){
         Flash::error('Debe conectarse desde un ordenador para que pueda realizar la marcación!');
         return redirect(route('home'));
       }
@@ -182,7 +182,7 @@ class MarcacionController extends AppBaseController
         return view('errors.403', compact('main'));
       }
 
-      $tpempleado  =  User::where('status', TRUE)->where('employe', true)
+      $tpempleado  =  User::where('employe', true)
             ->select(DB::raw("UPPER(CONCAT(last_name,'  ', first_name)) AS name"), "users.id as id")
             ->orderBy('name',  'ASC')
             ->pluck( '(last_name||" " ||first_name)as name', 'users.id as id');
