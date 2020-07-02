@@ -260,7 +260,7 @@ class UserController extends Controller
   public function rolDetailsSelect(){
 
     if (request()->ajax( )){
-      $rol =  VMenuRoles::where('id_rol', '=', request()->id)
+      $rol =  VMenuRoles::where('role_id', '=', request()->id)
          ->join('main', 'main.id', '=', 'v_menu_roles.id')
          ->select('main.main_name as main', 'v_menu_roles.ramanombre',
          'v_menu_roles.id',  'v_menu_roles.role_id','v_menu_roles.role_name as rol')
