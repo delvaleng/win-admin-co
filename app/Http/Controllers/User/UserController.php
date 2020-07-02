@@ -284,11 +284,11 @@ class UserController extends Controller
 
         $rol = Main::where('users.id', '=', $id_user)
           ->where('main.status', '=', 'TRUE')
-          ->join('rol_main', 'main.id',               '=',   'rol_main.id_main')
+          ->join('rol_main', 'main.id',               '=',   'rol_main.main_id')
           ->join('roles',    'roles.id',              '=',   'rol_main.role_id')
-          ->join('RolUser', 'RolUser.role_id',      '=',   'roles.id')
-          ->join('users',    'users.id',              '=',   'RolUser.id_user')
-          ->select('roles.id','RolUser.id as id_roluser')
+          ->join('rol_users',  'rol_users.role_id',        '=',   'roles.id')
+          ->join('users',    'users.id',              '=',   'rol_users.id_user')
+          ->select('roles.id','rol_users.id as id_roluser')
           ->first();
         $roluser = $rol{'id_roluser'};
 
