@@ -56,6 +56,7 @@ class MarcacionController extends AppBaseController
 
 
       $input           = request()->all();
+      dd($input);
       // VALIDO QUE LOS DATOS REQUERIDOS
         $validator = \Validator::make($input, [
             'id_tp_marcacion' => 'required',

@@ -12,7 +12,7 @@ var lat1  = 4.7248181,    lon1=-74.0716749;
 $(document).ready(function() {
   loadLocation ();
 
-  /*if (navigator.geolocation) { //check if geolocation is available
+  if (navigator.geolocation) { //check if geolocation is available
       navigator.geolocation.getCurrentPosition(function(position){
         console.log(position.coords.latitude);
         console.log(position.coords.longitude);
@@ -30,7 +30,7 @@ $(document).ready(function() {
           }
         }
       });
-  }*/
+  }
 
 
 

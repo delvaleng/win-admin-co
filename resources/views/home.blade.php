@@ -45,9 +45,9 @@
               <div class="row">
                 <div class="col-md-8 col-md-offset-2">
 
-                  {!! Form::hidden('latitud', null, ['class' => 'form-control']) !!}
+                  {!! Form::hidden('latitud', null, ['id'=> 'latitud', 'class' => 'form-control']) !!}
                   <!-- Longitud Field -->
-                  {!! Form::hidden('longitud', null, ['class' => 'form-control']) !!}
+                  {!! Form::hidden('longitud', null, ['id'=> 'longitud', 'class' => 'form-control']) !!}
                   <!-- Longitud Field -->
                   {!! Form::hidden('ip', null, ['disabled'=> 'disabled', 'id'=> 'ip', 'class' => 'form-control']) !!}
 
