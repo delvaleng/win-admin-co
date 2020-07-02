@@ -286,8 +286,8 @@ class UserController extends Controller
           ->where('main.status', '=', 'TRUE')
           ->join('rol_main', 'main.id',               '=',   'rol_main.main_id')
           ->join('roles',    'roles.id',              '=',   'rol_main.role_id')
-          ->join('rol_users',  'rol_users.role_id',        '=',   'roles.id')
-          ->join('users',    'users.id',              '=',   'rol_users.id_user')
+          ->join('rol_users',  'rol_users.role_id',   '=',   'roles.id')
+          ->join('users',    'users.id',              '=',   'rol_users.user_id')
           ->select('roles.id','rol_users.id as id_roluser')
           ->first();
         $roluser = $rol{'id_roluser'};
@@ -295,13 +295,13 @@ class UserController extends Controller
         $permissions = Rol_permissions::where('id_roluser', '=', $roluser);
         $permissions->delete();
 
-        $RolUser = RolUser::where('id_user', '=', $id_user);
+        $RolUser = RolUser::where('user_id', '=', $id_user);
         $RolUser->delete();
 
         foreach ($roles as $r) {
           $userRole =[
             'role_id'        => $r,
-            'id_user'        => $id_user,
+            'user_id'        => $id_user,
           ];
           RolUser::create($userRole);
         }
