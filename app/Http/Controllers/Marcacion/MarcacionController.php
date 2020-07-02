@@ -56,7 +56,7 @@ class MarcacionController extends AppBaseController
 
 
       $input           = request()->all();
-      dd($input);
+      // dd($input);
       // VALIDO QUE LOS DATOS REQUERIDOS
         $validator = \Validator::make($input, [
             'id_tp_marcacion' => 'required',
@@ -108,7 +108,7 @@ class MarcacionController extends AppBaseController
           $validDay->update();
         }
 
-          Flash::success('Marcacion guardada correctamente.');
+          Flash::success('<li>Marcacion guardada correctamente.</li>');
 
           return redirect(route('home'));
 
