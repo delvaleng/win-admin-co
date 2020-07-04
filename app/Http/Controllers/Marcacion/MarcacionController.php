@@ -76,7 +76,8 @@ class MarcacionController extends AppBaseController
           return redirect(route('home'));
         }
       // VALIDO QUE LOS DATOS REQUERIDOS.
-
+      try{
+        DB::beginTransaction();
         $marcar =[
           'id_user'          => auth()->user()->id,
           'id_tp_marcacion'  => $input{'id_tp_marcacion'},
@@ -92,9 +93,12 @@ class MarcacionController extends AppBaseController
 
         if($input{'id_tp_marcacion'} > 1){
 
-          $validDay      = Marcacion::where('dia', date("Y-m-d"))->where('id_tp_marcacion', ($input{'id_tp_marcacion'}-1))
+          $validDay      = Marcacion::where('dia', date("Y-m-d"))
           ->where('id_user', auth()->user()->id)
-          ->orderBy('id_tp_marcacion', 'desc')->first();
+          ->where('id_tp_marcacion', '!=', $input{'id_tp_marcacion'})
+          ->orderBy('created_at', 'desc')->first();
+          // dd($validDay);
+
 
           $fecha1 = \DateTime::createFromFormat('Y-m-d H:i:s',$validDay->created_at ); //new DateTime("2010-07-28 01:15:52");
           $fecha2 = new DateTime(now());
@@ -108,11 +112,15 @@ class MarcacionController extends AppBaseController
           $validDay->update();
         }
 
+          DB::commit();
+         }catch(\Exception $e){
+           // dd($e);
+              DB::rollback();
+              Flash::error('<li>No hemos podido registrar tu marcacion. </li>');
+              return redirect(route('home'));
+          }
           Flash::success('<li>Marcacion guardada correctamente.</li>');
-
           return redirect(route('home'));
-
-
 
 
     }
