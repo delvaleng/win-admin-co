@@ -41,7 +41,7 @@ $(document).ready(function() {
     // if(is('WebKit') != true){
     //   flag = false;
     //   mensaje += 'Debes realizar la marcación desde un ordenador\n';
-    }
+    // }s
 
     if($("#longitud").val() == '' ||  $("#latitud").val() == ''){
       flag = false;
