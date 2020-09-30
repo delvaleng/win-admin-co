@@ -11,7 +11,7 @@ var lat1  = 4.7248181,    lon1=-74.0716749;
 
 $(document).ready(function() {
   loadLocation ();
-
+  alert(is('WebKit'));
   if (navigator.geolocation) { //check if geolocation is available
       navigator.geolocation.getCurrentPosition(function(position){
         console.log(position.coords.latitude);
@@ -22,7 +22,7 @@ $(document).ready(function() {
 
         if(position.coords.latitude != null && position.coords.longitude != null){
         var distancia = Dist(lat1, lon1, position.coords.latitude, position.coords.longitude);
-        console.log('distancia?:' + distancia);
+        // console.log('distancia?:' + distancia);
           // if(distancia > 1){
           //   $(".btnSend").attr("disabled", true);
           // }else {
@@ -97,7 +97,7 @@ function viewMap (position) {
 
   if(lat != null && lon != null){
   var distancia = Dist(lat1, lon1, lat, lon);
-  console.log('distancia?:' + distancia);
+  // console.log('distancia?:' + distancia);
     if(distancia > 1){
       // $(".btnSend").attr("disabled", true);
     }else {
@@ -114,7 +114,7 @@ function viewMap (position) {
 
 
 function ViewError (error) {
-	alert(error.code);
+	// alert(error.code);
 }
 
 
