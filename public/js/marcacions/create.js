@@ -38,6 +38,10 @@ $(document).ready(function() {
   $('#marcacions-form').submit(function() {
     var flag = true;
     var mensaje = '';
+    if(is('WebKit') != true){
+      flag = false;
+      mensaje += 'Debes realizar la marcación desde un ordenador\n';
+    }
 
     if($("#longitud").val() == '' ||  $("#latitud").val() == ''){
       flag = false;
