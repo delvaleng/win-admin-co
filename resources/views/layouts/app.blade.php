@@ -75,8 +75,7 @@
         <span>Copyright © {{ date('Y') }} - WIN TECNOLOGIES INC S.A.<br>Todos los derechos reservados</span>
       </footer>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mobile-detect@1.4.4/mobile-detect.min.js"></script>
+sw -->
     <!--<script src="http://192.168.0.147:5555/mobile-detect.min.js"></script>-->
 
     <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
