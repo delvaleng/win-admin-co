@@ -1,5 +1,5 @@
 $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
-var lat1  = 4.6370876999999995,    lon1=-74.0887461;
+var lat1  = 4.6301557,    lon1=-74.0883363;
 
 $(document).ready(function() {
 

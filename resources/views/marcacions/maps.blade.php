@@ -29,7 +29,7 @@
 @section('scripts')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAph1Y5uOO5kNkeZFzcy1odYf4ADNSOmng&callback=initMap" type="text/javascript"></script>
 <script type="text/javascript">
-  var latlng = new google.maps.LatLng(4.6370876999999995,-74.0887461);
+  var latlng = new google.maps.LatLng(4.6301557,-74.0883363);
   var myOptions = {
     zoom: 14,
     center: latlng,
